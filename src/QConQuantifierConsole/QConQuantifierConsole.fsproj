@@ -9,9 +9,9 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandLine.fsi" />
+    <Compile Include="CLIArguments.fsi" />
     <Compile Include="CommandLine.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QConQuantifier\QConQuantifier.fsproj"></ProjectReference>

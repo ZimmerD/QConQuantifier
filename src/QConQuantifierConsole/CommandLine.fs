@@ -3,7 +3,7 @@ namespace QConQuantifier
 open Argu
 open System
 
-module CommandLine = 
+module Quantify = 
     let private bind f = 
         function
         | Ok x -> f x
