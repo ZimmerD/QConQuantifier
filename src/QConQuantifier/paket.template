@@ -1,0 +1,29 @@
+type file
+id QConQuantifier
+title
+    QConQuantifier
+owners
+    David Zimmer
+authors 
+    David Zimmer
+projectUrl
+    https://github.com/ZimmerD/QConQuantifier
+iconUrl
+    https://raw.githubusercontent.com/ZimmerD/QConQuantifier/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/ZimmerD/QConQuantifier/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+language
+    F#
+copyright
+    Copyright 2017
+tags
+    proteomics FSharp
+summary
+    Summary not set
+description
+    Description not set
+
+files
+	../../bin/QConQuantifier ==> lib
