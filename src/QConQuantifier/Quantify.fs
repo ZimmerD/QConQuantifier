@@ -7,7 +7,7 @@ namespace QConQuantifier
 ///     let h = Library.hello 1
 ///     printfn "%d" h
 ///
-module Library = 
+module Quantify = 
   
   /// Returns 42
   ///
