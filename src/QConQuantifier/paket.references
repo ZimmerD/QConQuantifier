@@ -1,4 +1,5 @@
 FSharp.Core
+FSharp.Plotly
 Newtonsoft.Json
 Argu
 BioFSharp
@@ -10,3 +11,4 @@ BioFSharp.Mz
 MzLite
 MzLite.Processing
 MzLite.SQL
+Deedle

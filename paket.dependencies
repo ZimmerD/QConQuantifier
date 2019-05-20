@@ -4,6 +4,7 @@ source https://nuget.org/api/v2
 
 nuget FSharp.Core
 nuget Argu
+nuget FSharp.Plotly
 
 nuget Expecto
 nuget Expecto.BenchmarkDotNet
@@ -24,6 +25,7 @@ git https://github.com/CSBiology/BioFSharp.git nuget Packages: /
 
 nuget BioFSharp
 nuget BioFSharp.IO
+nuget BioFSharp.BioTools
 
 git https://github.com/CSBiology/BioFSharp.Mz.git nuget Packages: /
 
@@ -31,10 +33,12 @@ nuget BioFSharp.Mz
 
 git https://github.com/CSBiology/MzLite.git nuget Packages: /
 
-nuget MzLite
-nuget MzLite.Processing
-nuget MzLite.SQL
+nuget MzLite 1.2.0
+nuget MzLite.Processing 1.2.0
+nuget MzLite.SQL 1.2.0
 nuget System.Data.SQLite
+
+nuget Deedle
 
 
 clitool dotnet-fake
