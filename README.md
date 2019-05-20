@@ -1,6 +1,8 @@
 # QConQuantifier
 ### Description
-The QConQuantifier provides researchers with interest in targeted proteomics using quantification qconcatamers (QConcats) with an easy-to-use-all-in-one software solution.
+The QConQuantifier provides researchers with interest in targeted proteomics using quantification qconcatamers (QConcats) 
+with an easy-to-use-all-in-one software solution provided as a script and console tool.
+
  
 ### Motiviation
 This project was created within the scope of the applied F# Challenge 2019. 
