@@ -2,22 +2,23 @@ namespace QConQuantifier
 
 open System
 open System.IO
+open BioFSharp.Mz
+
 open MzLite.Model
 open MzLite.SQL
-open BioFSharp.Mz
-open Newtonsoft.Json
-open Parameters.DTO
+open MzLite.Processing
 
 module IO = 
-
             
     module Reader = 
 
+        /// Creates an mzLite reader. This object is used to access data stored in the mzLite format.
         let createReader mzLiteFilePath = 
             if Path.GetExtension mzLiteFilePath = ".mzlite" then
                 new MzLiteSQL(mzLiteFilePath)
             else failwith "only mzLite files are allowed as input. Reader could not be initialized."
-
+        
+        /// Returns all mass spectra present in a mzLite file. 
         let getMassSpectra (reader:MzLiteSQL) = 
             reader.ReadMassSpectra("sample=0")
 
@@ -48,6 +49,7 @@ module IO =
             else 
                 -1.  
         
+        /// Returns a Peak array containing all peaks of a given mass spectrum.
         let getPeaks (reader:MzLiteSQL) (ms:MassSpectrum) = 
             reader.ReadSpectrumPeaks(ms.ID).Peaks
             |> Seq.map (fun p-> Peak(p.Mz,p.Intensity))
@@ -55,20 +57,19 @@ module IO =
 
     module XIC = 
 
-        open MzLite.Processing
-
-        /// Quantification
+        /// Creates a range query used to define look up dimensions, e.g. in rt
         let createRangeQuery v offset =
             new RangeQuery(v, offset)
 
-        ///
+        /// Creates an retention time (scan time) index. This data structure preserves the order of all ms1s to facilitate a fast XIC extraction.
         let getRetentionTimeIdx (reader:MzLiteSQL) = reader.BuildRtIndex("sample=0")
 
-        /// 
+        /// Returns a XIC from a file (reader). A retention time index (rtIdx) has to be created beforhand. The rt and mz dimensions of the XIC are defined using range queries.
         let getXICBy (reader:MzLiteSQL) (rtIdx:MzLite.Commons.Arrays.IMzLiteArray<MzLiteLinq.RtIndexEntry>) (rtQuery:RangeQuery) (mzQuery:RangeQuery) = 
             reader.RtProfile(rtIdx, rtQuery, mzQuery) 
         
-        /// 
+        /// Returns a XIC from a file (reader). A retention time index (rtIdx) has to be created beforhand. 
+        /// given rt and mz values along with their offsets this function will internally create Query items.
         let initGetXIC (reader:MzLiteSQL) (rtIdx:MzLite.Commons.Arrays.IMzLiteArray<MzLiteLinq.RtIndexEntry>) rtOffset mzOffset tarRT tarMz  = 
             let rtQuery = createRangeQuery tarRT rtOffset
             let mzQuery = createRangeQuery tarMz mzOffset

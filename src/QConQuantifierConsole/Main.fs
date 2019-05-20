@@ -26,14 +26,16 @@ module QConQuantifier =
             | None   -> 1 
         match manufacturerOutput, outputDir, paramF with 
         | Some i, Some o , Some p -> 
-            
+            ///
             let processParams: Parameters.Domain.QConQuantifierParams = 
                 System.IO.File.ReadAllText p
                 |> JsonConvert.DeserializeObject<Parameters.DTO.QConQuantifierParams> 
                 |> Parameters.DTO.QConQuantifierParams.toDomain
+            ///
             let inputFiles = DirectoryInfo(i).GetFiles("*.mzlite")
-                        
+            ///            
             let peptideDB = PeptideLookUp.dbLookUpCn processParams
+            ///
             let res = 
                 inputFiles 
                 |> PSeq.map (fun f -> 
@@ -45,11 +47,12 @@ module QConQuantifier =
                 |> PSeq.withDegreeOfParallelism numberOfCores
                 |> List.ofSeq
                 |> Pipeline.mergeFrames
+
+            ///
             let outFilePath = Path.Combine [|o;"QuantifiedPeptides.txt"|]
             res.SaveCsv(outFilePath,includeRowKeys=true,separator='\t',keyNames=["StringSequence";"GlobalMod";"Charge"])
             printfn "Done."
-            //Pipeline.analyzeFile  (*.processFile processParams o i*)
-        | _ -> failwith "params are not guut"
+        | _ -> failwith "Error parsing provided Parameters. Type --h for help."
         System.Console.ReadKey() |> ignore
         printfn "Hit any key to exit."
         0

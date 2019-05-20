@@ -9,8 +9,8 @@ module CLIArgumentParsing =
     type CLIArguments =
         | [<Mandatory>] [<Unique>] [<AltCommandLine("-i")>] MzLiteFileDirectory of directoryPath:string
         | [<Mandatory>] [<Unique>] [<AltCommandLine("-o")>] OutputDirectory  of directoryPath:string 
-        | [<Mandatory>] [<Unique>] [<AltCommandLine("-p")>] ParamFile of path:string
-        | [<Unique>] [<AltCommandLine("-c")>] NumberOfCores of number:int
+        | [<Mandatory>] [<Unique>] [<AltCommandLine("-p")>] ParamFile of filePath:string
+        | [<Unique>] [<AltCommandLine("-c")>] NumberOfCores of integer:int
     with
         interface IArgParserTemplate with
             member s.Usage =

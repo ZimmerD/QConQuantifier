@@ -51,6 +51,8 @@ module Parameters =
                 } 
     
     module DTO = 
+        open BioFSharp.Elements
+
         type MassMode = SearchDB.MassMode
 
         module MassMode =
@@ -72,12 +74,17 @@ module Parameters =
 
         type IsotopicMod =
             | N15
+            | C13
 
         module IsotopicMod =
             let toDomain isoMod = 
                 match isoMod with
-                | N15 -> (createSearchInfoIsotopic "N15" Elements.Table.N Elements.Table.Heavy.N15)
- 
+                | N15 -> 
+                    createSearchInfoIsotopic "N15" Elements.Table.N Elements.Table.Heavy.N15
+                | C13 -> 
+                    let C13 = Element.Di (createDi "C13" (Isotopes.Table.C13,Isotopes.Table.C12.NatAbundance) (Isotopes.Table.C12,Isotopes.Table.C13.NatAbundance) )
+                    createSearchInfoIsotopic "C15" Elements.Table.C C13
+        
         type Modification =
             | Acetylation'ProtNTerm'
             | Carbamidomethyl'Cys'

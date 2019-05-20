@@ -15,8 +15,7 @@ module Identification =
 
     /// Returns a function to perform a in silico fragmentation of any given aminoAcid list. The computed N- and C-terminal ion ladders are defined in qConQuantParams.
     let initCalcIonSeries (qConQuantParams:QConQuantifierParams) =
-        fun aal ->         
-            Fragmentation.Series.fragmentMasses qConQuantParams.NTerminalSeries qConQuantParams.CTerminalSeries qConQuantParams.MassFunction aal
+        fun aal -> Fragmentation.Series.fragmentMasses qConQuantParams.NTerminalSeries qConQuantParams.CTerminalSeries qConQuantParams.MassFunction aal
    
     /// Maps all fragment spectra (ms2s) and matches their spectra against in silico spectra. The insilico spectra are retrieved based on the precursor mzs of the 
     /// ms2s, user supplied minimal and maximum charge states and user supplied search tolerance in ppm.  
@@ -27,10 +26,11 @@ module Identification =
                             ms2s
                             |> Array.choose (fun ms2 -> 
                                             try
-                                            let recSpec = MassSpectrum.getPeaks reader ms2
-                                            Some(ms2,recSpec)
+                                                let recSpec = MassSpectrum.getPeaks reader ms2
+                                                Some(ms2,recSpec)
                                             with
-                                            | _ -> Option.None
+                                            | _ -> 
+                                                Option.None
                                             )
                             |> Array.choose (fun (ms2,recSpec) -> 
                                             try
