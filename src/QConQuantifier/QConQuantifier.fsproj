@@ -15,8 +15,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Parameters.fs" />
+    <Compile Include="IO.fs" />
+    <Compile Include="Stats.fs" />
+    <Compile Include="PeptideLookUp.fs" />
+    <Compile Include="Identification.fs" />
     <Compile Include="Charting.fs" />
-    <Compile Include="Quantify.fs" />
+    <Compile Include="Quantification.fs" />
+    <Compile Include="Pipeline.fs" />
     <None Include="Scripts\Script.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />
