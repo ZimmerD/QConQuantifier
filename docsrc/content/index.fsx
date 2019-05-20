@@ -13,8 +13,7 @@ Documentation
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The QConQuantifier library can be <a href="https://nuget.org/packages/QConQuantifier">installed from NuGet</a>:
-      <pre>PM> Install-Package QConQuantifier</pre>
+      The QConQuantifier library can be downloaded from <a href="https://github.com/ZimmerD/QConQuantifier">github</a>:
     </div>
   </div>
   <div class="span1"></div>
@@ -23,7 +22,7 @@ Documentation
 Example
 -------
 
-This example demonstrates using a function defined in this sample library.
+This example demonstrates starting the console tool.
 
 *)
 #r "QConQuantifier.dll"
