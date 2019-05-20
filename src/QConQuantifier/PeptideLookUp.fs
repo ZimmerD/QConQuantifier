@@ -29,7 +29,7 @@ module PeptideLookUp =
         GlobalMod           = globalMod
         }   
         
-    ///
+    /// Extracts Params for data base creation from QConcatParams.
     let peptideDBParamsOf (qConCatParams:QConQuantifierParams) =
         let Ofasta = FastA.fromFile id qConCatParams.OrganismFastaPath
         let Qfasta = Seq.collect (FastA.fromFile id) qConCatParams.QConCatFastaPaths
@@ -50,7 +50,7 @@ module PeptideLookUp =
                 qConCatParams.MinPepLength qConCatParams.MaxPepLength qConCatParams.IsotopicMod qConCatParams.MassMode
                     qConCatParams.MassFunction qConCatParams.FixedMods qConCatParams.VariableMods qConCatParams.VarModThreshold
 
-    ///
+    /// Creates connection to local peptide data base. If no data base is present this command will create a new data base.
     let dbLookUpCn (qConCatParams:QConQuantifierParams) = 
         let dbParams = peptideDBParamsOf qConCatParams
         SearchDB.connectOrCreateDB dbParams
@@ -78,10 +78,10 @@ module PeptideLookUp =
             readerloop reader [] 
             |> Seq.map (fun (pS,mS,mM,mC,gM) -> createQConcatPeptide pS mS mM mC gM)
 
-    ///
+    /// Creates a in-memory copy of the peptide data base. This speeds up the peptide look up.
     let copyDBIntoMemory (cn:SQLiteConnection) = SearchDB.copyDBIntoMemory cn
 
-    ///
+    /// Returns a function that returns all peptides that lie within the range of value1 and value2.
     let initSelectModPeptideByMassRange (qConCatParams:QConQuantifierParams)  (cn:SQLiteConnection) =  
         let parseAAString = SearchDB.initOfModAminoAcidString qConCatParams.IsotopicMod (qConCatParams.FixedMods@qConCatParams.VariableMods)
         let selectModsequenceByMassRange = SearchDB.Db.SQLiteQuery.prepareSelectModsequenceByMassRange cn 
