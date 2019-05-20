@@ -1,6 +1,6 @@
 namespace QConQuantifier
 
-module Quantify = 
+module Pipeline = 
 
     open System.Data.SQLite
     open Parameters.Domain
@@ -8,6 +8,7 @@ module Quantify =
     open System.IO
     open FSharp.Stats
     open BioFSharp.IO
+    open Deedle
 
     ///
     let analyzeFile (peptideDB:SQLiteConnection) (qConQuantParams:QConQuantifierParams) outputDir mzLiteFilePath = 
@@ -23,14 +24,15 @@ module Quantify =
 
         ///
         let plotDirectory =
-            let path = Path.Combine [|outputDir;"plots"|] 
+            let path = Path.Combine [|outputDir;"plots";rawFileName|] 
             Directory.CreateDirectory(path) |> ignore
             path            
-        
+
+        //////////////////
+        //Identification
+        //////////////////        
         ///copy peptideDB to memory to facilitate a fast look up
-        printfn "Copy peptide DB into Memory"
         let memoryDB = PeptideLookUp.copyDBIntoMemory peptideDB 
-        printfn "Copy peptide DB into Memory: finished"
 
         /// Gets all modified peptide between first and second mass.
         let selectModPeptideByMassRange = PeptideLookUp.initSelectModPeptideByMassRange qConQuantParams memoryDB
@@ -41,7 +43,6 @@ module Quantify =
         /// Given a AminoAcid list this function will compute N- and C-terminal ion ladders.
         let calcIonSeries = Identification.initCalcIonSeries qConQuantParams
                
-
         /// All peptides of qConcat heritage.
         let qConCatPeps = 
             let protHeader = 
@@ -67,7 +68,10 @@ module Quantify =
             
         /// 
         let thresholdedPsms = Identification.thresholdPSMs qConQuantParams psms
- 
+        
+        //////////////////
+        //Quantification
+        //////////////////
         /// 
         let rtIndex = IO.XIC.getRetentionTimeIdx inReader 
 
@@ -75,13 +79,17 @@ module Quantify =
         let getIsotopicVariant = Quantification.initGetIsotopicVariant qConCatPeps
  
         ///
-        let quantifiedPSMs = Quantification.quantifyPSMs inReader rtIndex qConQuantParams getIsotopicVariant thresholdedPsms
+        let quantifiedPSMs = Quantification.quantifyPSMs plotDirectory inReader rtIndex qConQuantParams getIsotopicVariant thresholdedPsms
 
-        quantifiedPSMs 
-        //|> Deedle.Frame.ofRecords  
-        //|> Frame.groupRowsUsing (fun k x -> x.Get("StringSequence"), x.Get("GlobalMod"),x.Get("Charge"))
-        //|> Frame.mapRowKeys fst
-        //|> Frame.dropCol "StringSequence"
-        //|> Frame.dropCol "GlobalMod"
-        //|> Frame.dropCol "Charge"
-        //|> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
+        ///
+        let results = 
+            quantifiedPSMs 
+            |> Deedle.Frame.ofRecords  
+            |> Frame.indexRowsUsing (fun x -> x.Get("StringSequence"), x.Get("GlobalMod"),x.Get("Charge"))
+            |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
+        results
+
+
+    let mergeFrames (frames:Frame<_,string> list) = 
+        frames |> List.reduce (Frame.join JoinKind.Outer) 
+         

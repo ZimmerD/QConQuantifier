@@ -92,7 +92,7 @@ module Quantification =
                 let minScanTime = psms |> Seq.minBy (fun x -> x.ScanTime) |> fun x -> x.ScanTime
                 let maxScanTime = psms |> Seq.maxBy (fun x -> x.ScanTime) |> fun x -> x.ScanTime
                 let c = (minScanTime + maxScanTime) / 2.
-                let w = maxScanTime - c
+                let w = (maxScanTime - c) + qConQuantifierParams.ScanTimeWindow
                 c, w
             let (retData,itzData)   =
                 let rtQuery = IO.XIC.createRangeQuery scanTimeCenter scanTimeWindow
@@ -127,14 +127,14 @@ module Quantification =
                 |> Array.map (fun p -> p.Rt , p.Intensity)
                 |> Array.unzip
             retData',itzData'
-        let peaks          = Signal.PeakDetection.SecondDerivative.getPeaks 0.1 2 7 retData itzData
+        let peaks          = Signal.PeakDetection.SecondDerivative.getPeaks 0.1 2 13 retData itzData
         let peakToQuantify = getPeakBy peaks targetScanTime
         let quantP         = quantifyPeak peakToQuantify  
         quantP,retData,itzData, peakToQuantify.XData
 
              
     ///
-    let quantifyPSMs reader rtIndex qConQuantifierParams getIsotopicVariant (psms:SearchEngineResult<float> list) = 
+    let quantifyPSMs plotDirectory reader rtIndex qConQuantifierParams getIsotopicVariant (psms:SearchEngineResult<float> list) = 
         psms
         |> List.groupBy (fun x -> x.StringSequence, x.GlobalMod,x.PrecursorCharge)
         |> List.choose (fun ((sequence,globMod,ch),psms) ->
@@ -142,7 +142,7 @@ module Quantification =
                         let ms2s = psms |> Seq.map (fun x -> x.ScanTime,x.Score)
                         let averagePSM = average reader rtIndex qConQuantifierParams psms
                         let avgMass = Mass.ofMZ (averagePSM.MeanPrecMz) (ch |> float)
-                        let peaks          = Signal.PeakDetection.SecondDerivative.getPeaks 0.1 2 7 averagePSM.X_Xic averagePSM.Y_Xic
+                        let peaks          = Signal.PeakDetection.SecondDerivative.getPeaks 0.1 2 13 averagePSM.X_Xic averagePSM.Y_Xic
                         let peakToQuantify = getPeakBy peaks averagePSM.WeightedAvgScanTime
                         let quantP = quantifyPeak peakToQuantify 
                         let searchScanTime = 
@@ -156,8 +156,8 @@ module Quantification =
                             let n15Quant,rt,itz,rtP = quantifyBy reader rtIndex qConQuantifierParams n15mz searchScanTime
                             let n15Minus1Mz    = n15mz - (Mass.Table.NMassInU / (ch|> float))
                             let n15Minus1Quant,_,_,_ = quantifyBy reader rtIndex qConQuantifierParams n15Minus1Mz searchScanTime
-                            //let chart = saveChart sequence globMod ch averagePSM.X_Xic averagePSM.Y_Xic ms2s averagePSM.WeightedAvgScanTime 
-                            //                peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n15Quant.YPredicted
+                            let chart = Charting.saveChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic   
+                                            peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n15Quant.YPredicted
                                 
                         
                             createQuantifiedPeptide sequence globMod averagePSM.WeightedAvgScanTime averagePSM.MeanScore
@@ -169,8 +169,8 @@ module Quantification =
                             let n14Quant,rt,itz,rtP      = quantifyBy reader rtIndex qConQuantifierParams n14mz searchScanTime
                             let n15Minus1Mz    = averagePSM.MeanPrecMz - (Mass.Table.NMassInU / (ch|> float))
                             let n15Minus1Quant,_,_,_ = quantifyBy reader rtIndex qConQuantifierParams n15Minus1Mz searchScanTime
-                            //let chart = saveChart sequence globMod ch averagePSM.X_Xic averagePSM.Y_Xic ms2s averagePSM.WeightedAvgScanTime 
-                            //                peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n14Quant.YPredicted
+                            let chart = Charting.saveChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic  
+                                            peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n14Quant.YPredicted
                                 
                             createQuantifiedPeptide sequence globMod averagePSM.WeightedAvgScanTime averagePSM.MeanScore
                                     ch avgMass n14mz n14Quant.Area averagePSM.MeanPrecMz quantP.Area n15Minus1Mz n15Minus1Quant.Area

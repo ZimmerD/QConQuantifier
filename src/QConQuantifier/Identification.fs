@@ -13,11 +13,14 @@ open Parameters.Domain
 
 module Identification = 
 
-    ///
+    /// Returns a function to perform a in silico fragmentation of any given aminoAcid list. The computed N- and C-terminal ion ladders are defined in qConQuantParams.
     let initCalcIonSeries (qConQuantParams:QConQuantifierParams) =
         fun aal ->         
             Fragmentation.Series.fragmentMasses qConQuantParams.NTerminalSeries qConQuantParams.CTerminalSeries qConQuantParams.MassFunction aal
-    ///
+   
+    /// Maps all fragment spectra (ms2s) and matches their spectra against in silico spectra. The insilico spectra are retrieved based on the precursor mzs of the 
+    /// ms2s, user supplied minimal and maximum charge states and user supplied search tolerance in ppm.  
+    /// The algorithm used to compare theoretical and recorded spectra is the SEQUEST algorithm.
     let calcPeptideSpectrumMatches reader lookUpF calcIonSeries (qConQuantParams:QConQuantifierParams) (ms2s:MassSpectrum []) = 
         [|qConQuantParams.ExpectedMinCharge.. qConQuantParams.ExpectedMaxCharge|]
         |> Array.collect (fun chargeState ->  
@@ -68,7 +71,7 @@ module Identification =
                         )
         |> List.concat
    
-    /// 
+    /// Uses the target decoy approach to threshold psms at a given pep value cut off.
     let private filterPSMsByPepValue pepValueCutoff (psms:SearchEngineResult<float> list ) = 
         FDRControl.getPEPValues 1. (fun (x:SearchEngineResult.SearchEngineResult<float>) -> x.Score) (fun x -> not x.IsTarget ) (Array.ofList psms)
         |> List.ofArray
@@ -78,14 +81,14 @@ module Identification =
         |> List.groupBy (fun x -> x.SpectrumID)
         |> List.map (fun x -> snd x |> List.maxBy (fun x -> x.Score))
 
-    ///
+    /// Uses an arbitrary SequestScore threshold to filter PSMs.
     let private filterPSMsByScore scoreCutOff (psms:SearchEngineResult<float> list) =                        
         psms
         |> List.filter (fun x -> x.Score > scoreCutOff && x.IsTarget)
         |> List.groupBy (fun x -> x.SpectrumID)
         |> List.map (fun x -> snd x |> List.maxBy (fun x -> x.Score))
 
-    /////
+    /// Filters PSMs according to the PSMThresholding case definded in qConQuantParams.
     let thresholdPSMs (qConQuantParams:QConQuantifierParams) (psms:SearchEngineResult<float> list) =
         match qConQuantParams.PSMThreshold with 
         | PSMThreshold.PepValue v     -> filterPSMsByPepValue v psms

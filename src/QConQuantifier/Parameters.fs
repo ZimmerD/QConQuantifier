@@ -51,6 +51,7 @@ module Parameters =
                 } 
     
     module DTO = 
+        type MassMode = SearchDB.MassMode
 
         module MassMode =
    

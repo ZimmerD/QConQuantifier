@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47</TargetFrameworks>
+    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
     <RootNamespace>QConQuantifier</RootNamespace>
     <AssemblyName>QConQuantifier</AssemblyName>
     <Name>QConQuantifier</Name>
@@ -22,9 +22,12 @@
     <Compile Include="Charting.fs" />
     <Compile Include="Quantification.fs" />
     <Compile Include="Pipeline.fs" />
-    <None Include="Scripts\Script.fsx" />
+    <None Include="createParams.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

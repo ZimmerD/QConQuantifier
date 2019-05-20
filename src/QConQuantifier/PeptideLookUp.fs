@@ -51,7 +51,7 @@ module PeptideLookUp =
                     qConCatParams.MassFunction qConCatParams.FixedMods qConCatParams.VariableMods qConCatParams.VarModThreshold
 
     ///
-    let dbLookUpCn peptideDBParamsOf (qConCatParams:QConQuantifierParams) = 
+    let dbLookUpCn (qConCatParams:QConQuantifierParams) = 
         let dbParams = peptideDBParamsOf qConCatParams
         SearchDB.connectOrCreateDB dbParams
  

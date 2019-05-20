@@ -2,18 +2,16 @@ namespace QConQuantifier
 
 open System
 open System.IO
-open BioFSharp
-open BioFSharp.Mz
-open BioFSharp.Mz.SearchDB
 open MzLite.Model
 open MzLite.SQL
-open System.Linq
-open System.Collections.Generic
+open BioFSharp.Mz
+open Newtonsoft.Json
+open Parameters.DTO
 
 module IO = 
-    
-    module Reader = 
 
+            
+    module Reader = 
 
         let createReader mzLiteFilePath = 
             if Path.GetExtension mzLiteFilePath = ".mzlite" then

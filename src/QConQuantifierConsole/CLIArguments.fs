@@ -7,14 +7,15 @@ module CLIArgumentParsing =
 
     open System.IO
     type CLIArguments =
-        |[<Unique>] [<AltCommandLine("-i")>] MzLiteFileDirectory of directoryPath:string
-        |[<Unique>] [<AltCommandLine("-i")>] MzLiteFile  of filePath:string
-        |[<Unique>] [<AltCommandLine("-o")>] OutputDirectory  of directoryPath:string 
-        |[<Unique>] [<AltCommandLine("-p")>] ParamFile of path:string
+        | [<Mandatory>] [<Unique>] [<AltCommandLine("-i")>] MzLiteFileDirectory of directoryPath:string
+        | [<Mandatory>] [<Unique>] [<AltCommandLine("-o")>] OutputDirectory  of directoryPath:string 
+        | [<Mandatory>] [<Unique>] [<AltCommandLine("-p")>] ParamFile of path:string
+        | [<Unique>] [<AltCommandLine("-c")>] NumberOfCores of number:int
     with
         interface IArgParserTemplate with
             member s.Usage =
                 match s with
-                | MzLiteFile _ -> "specify mass spectrometry data in mzlite format."
-                | OutputDirectory  _ -> "specify output directory."
-                | ParamFile _        -> "specify param file."
+                | MzLiteFileDirectory _ -> "Specify directory to browse for mass spectrometry data (.mzlite)."
+                | OutputDirectory  _    -> "Specify output directory."
+                | ParamFile _           -> "Specify param file."
+                | NumberOfCores _       -> "Specify how many cores the application can use."
