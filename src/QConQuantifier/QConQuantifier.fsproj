@@ -14,6 +14,9 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Scripts\references.fsx" />
+    <None Include="Scripts\createParams.fsx" />
+    <None Include="Scripts\runQConcatifier.fsx" />
     <Compile Include="Parameters.fs" />
     <Compile Include="IO.fs" />
     <Compile Include="Stats.fs" />
@@ -22,12 +25,8 @@
     <Compile Include="Charting.fs" />
     <Compile Include="Quantification.fs" />
     <Compile Include="Pipeline.fs" />
-    <None Include="createParams.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
