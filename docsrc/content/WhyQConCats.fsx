@@ -33,4 +33,5 @@ this peptide cocktail can be spiked into samples originating from unlabled nitro
 Since the absolute amount of a single peptide is known, the ratio (e.g. light/heavy) can be used to calculate the absolute protein amount present in the sample.
 
 ![QConcat](img/QConcat.png)
+
 *)
