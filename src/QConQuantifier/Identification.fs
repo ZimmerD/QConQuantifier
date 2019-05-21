@@ -19,7 +19,7 @@ module Identification =
    
     /// Maps all fragment spectra (ms2s) and matches their spectra against in silico spectra. The insilico spectra are retrieved based on the precursor mzs of the 
     /// ms2s, user supplied minimal and maximum charge states and user supplied search tolerance in ppm.  
-    /// The algorithm used to compare theoretical and recorded spectra is the SEQUEST algorithm.
+    /// The algorithm used to compare theoretical and recorded spectra is the SEQUEST algorithm implemented in the BioFSharp.Mz library.
     let calcPeptideSpectrumMatches reader lookUpF calcIonSeries (qConQuantParams:QConQuantifierParams) (ms2s:MassSpectrum []) = 
         [|qConQuantParams.ExpectedMinCharge.. qConQuantParams.ExpectedMaxCharge|]
         |> Array.collect (fun chargeState ->  
