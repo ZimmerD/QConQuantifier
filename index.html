@@ -43,30 +43,89 @@
 To build the tool please make sure that you have installed:
 <ul>
 <li>2.1 the latest  <a href="https://dotnet.microsoft.com/download">.NET Core SDK</a> AND <a href="https://dotnet.microsoft.com/downloadr">.NET Framework Dev Pack</a>.</li>
-<li>2.2 the fake cli via "dotnet tool install fake-cli -g", build the by calling "fake build". For details regarding projects based uppon the project scaffold please visit <a href="https://github.com/fsprojects/ProjectScaffold">ProjectScaffold</a> or <a href="https://github.com/CSBiology/CsbScaffold">CsbScaffold</a>.</li>
+<li>2.2 the fake cli via "dotnet tool install fake-cli -g", build by calling "fake build" in the root of the project. For details regarding projects based uppon the project scaffold please visit <a href="https://github.com/fsprojects/ProjectScaffold">ProjectScaffold</a> or <a href="https://github.com/CSBiology/CsbScaffold">CsbScaffold</a>.</li>
 </ul>
 </li>
 <li>Once everything is set up you can download <a href="https://1drv.ms/u/s!Ak2uNQ51QZNO00S3QjgrSl6XDMVS">sample datasets</a> and get started!</li>
 </ol>
 <h2><a name="Example" class="anchor" href="#Example">Example</a></h2>
-<p>This example demonstrates running the console tool.</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
+<p>After downloading the sample data set and building the project you can approach to analyze the data, by executing the QConQuantifier console tool.</p>
+<h3><a name="Running-the-tool" class="anchor" href="#Running-the-tool">Running the tool.</a></h3>
+<p>Navigate to ..\QConQuantifier\src\QConQuantifier\Scripts and open createParams.fsx with your favorite IDE. As you can see I already referenced
+paths fitting to the structure of the sample data. You will probably have to refine the paths a bit. Now we can use the help of intellisense to create a parameter
+type. In the end we will end up with a human readable Json file that we can exchange with colleagues and reuse if we want to start the console tool again.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;QConQuantifier.dll&quot;</span>
-<span class="k">open</span> <span class="id">QConQuantifier</span>
-
-<span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="fn">printfn</span> <span class="s">&quot;hello = </span><span class="pf">%i</span><span class="s">&quot;</span> <span class="o">&lt;|</span> <span class="id">Library</span><span class="pn">.</span><span class="id">hello</span> <span class="n">0</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="id">qConQuantifierParams</span> <span class="o">=</span> 
+    <span class="pn">{</span>
+    <span class="id">Name</span>                            <span class="o">=</span> <span class="s">&quot;ChlamyTruncDB&quot;</span>
+    <span class="id">DbFolder</span>                        <span class="o">=</span>  <span class="s">@&quot;C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\db&quot;</span>
+    <span class="id">QConCatFastaPaths</span>               <span class="o">=</span> <span class="pn">[</span><span class="s">@&quot;C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\fasta\PS QconCAT.fasta&quot;</span><span class="pn">]</span>
+    <span class="id">OrganismFastaPath</span>               <span class="o">=</span>  <span class="s">@&quot;C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\fasta\Chlamy_JGI5_trunc.fasta&quot;</span>
+    <span class="id">ParseProteinIDRegexPattern</span>      <span class="o">=</span> <span class="s">&quot;id&quot;</span>
+    <span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="id">Protease</span>                        <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="m">Protease</span><span class="pn">.</span><span class="id">Trypsin</span>
+    <span class="id">MinMissedCleavages</span>              <span class="o">=</span> <span class="n">0</span>
+    <span class="id">MaxMissedCleavages</span>              <span class="o">=</span> <span class="n">1</span>
+    <span class="id">MaxMass</span>                         <span class="o">=</span> <span class="n">15000.</span>
+    <span class="id">MinPepLength</span>                    <span class="o">=</span> <span class="n">5</span>
+    <span class="id">MaxPepLength</span>                    <span class="o">=</span> <span class="n">50</span>
+    <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="id">IsotopicMod</span>                     <span class="o">=</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs13', 17)" onmouseover="showTip(event, 'fs13', 17)" class="m">IsotopicMod</span><span class="pn">.</span><span class="id">N15</span><span class="pn">]</span>
+    <span onmouseout="hideTip(event, 'fs14', 18)" onmouseover="showTip(event, 'fs14', 18)" class="id">MassMode</span>                        <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 19)" onmouseover="showTip(event, 'fs14', 19)" class="m">MassMode</span><span class="pn">.</span><span class="id">Monoisotopic</span>
+    <span class="id">FixedMods</span>                       <span class="o">=</span> <span class="pn">[</span><span class="pn">]</span>            
+    <span class="id">VariableMods</span>                    <span class="o">=</span> <span class="pn">[</span><span class="pn">]</span>
+    <span class="id">VarModThreshold</span>                 <span class="o">=</span> <span class="n">3</span>
+    <span class="id">ExpectedMinCharge</span>               <span class="o">=</span> <span class="n">2</span>
+    <span class="id">ExpectedMaxCharge</span>               <span class="o">=</span> <span class="n">3</span>
+    <span class="id">LookUpPPM</span>                       <span class="o">=</span> <span class="n">30.</span>
+    <span class="id">ScanRange</span>                       <span class="o">=</span> <span class="n">100.0</span><span class="pn">,</span><span class="n">1600.0</span>
+    <span onmouseout="hideTip(event, 'fs15', 20)" onmouseover="showTip(event, 'fs15', 20)" class="id">PSMThreshold</span>                    <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="rt">PSMThreshold</span><span class="pn">.</span><span class="id">PepValue</span> <span class="n">0.05</span>
+    <span class="id">ScanTimeWindow</span>                  <span class="o">=</span> <span class="n">2.5</span>
+    <span class="id">MzWindow_Da</span>                     <span class="o">=</span> <span class="n">0.07</span>
+    <span onmouseout="hideTip(event, 'fs16', 22)" onmouseover="showTip(event, 'fs16', 22)" class="id">NTerminalSeries</span>                 <span class="o">=</span> <span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="m">NTerminalSeries</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 24)" onmouseover="showTip(event, 'fs17', 24)" class="id">B</span>
+    <span onmouseout="hideTip(event, 'fs18', 25)" onmouseover="showTip(event, 'fs18', 25)" class="id">CTerminalSeries</span>                 <span class="o">=</span> <span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="m">CTerminalSeries</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs19', 27)" onmouseover="showTip(event, 'fs19', 27)" class="id">Y</span>
+    <span class="pn">}</span> 
+    <span class="c">//|&gt; QConQuantifierParams.toDomain</span>
 </code></pre></td>
 </tr>
 </table>
-<p>Some more info</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs1', 28)" onmouseover="showTip(event, 'fs1', 28)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 29)" onmouseover="showTip(event, 'fs2', 29)" class="id">IO</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="rt">File</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="id">WriteAllText</span><span class="pn">(</span><span class="s">&quot;C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\params.Json&quot;</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="fn">Newtonsoft</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 33)" onmouseover="showTip(event, 'fs23', 33)" class="id">Json</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs24', 34)" onmouseover="showTip(event, 'fs24', 34)" class="rt">JsonConvert</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 35)" onmouseover="showTip(event, 'fs25', 35)" class="id">SerializeObject</span> <span onmouseout="hideTip(event, 'fs11', 36)" onmouseover="showTip(event, 'fs11', 36)" class="id">qConQuantifierParams</span><span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>After creating this parameter set and writing it to a file we have everything to start the console tool.
+To see which parameters the tool expects we can start it with the --help parameter.</p>
+<p><img src="img/DockerImages.png" alt="cmd_helpOut" /></p>
 <h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
-<p>The library comes with comprehensible documentation.
-It can include tutorials automatically generated from <code>*.fsx</code> files in <a href="https://github.com/fsprojects/QConQuantifier/tree/master/docs/content">the content folder</a>.
-The API reference is automatically generated from Markdown comments in the library implementation.</p>
 <ul>
 <li><p><a href="tutorial.html">Tutorial</a> contains a further explanation of this sample library.</p></li>
 <li>
@@ -75,16 +134,32 @@ and functions in the library. This includes additional brief samples on using mo
 functions.</p>
 </li>
 </ul>
-<h2><a name="Contributing-and-copyright" class="anchor" href="#Contributing-and-copyright">Contributing and copyright</a></h2>
-<p>The project is hosted on <a href="https://github.com/fsprojects/QConQuantifier">GitHub</a> where you can <a href="https://github.com/fsprojects/QConQuantifier/issues">report issues</a>, fork
-the project and submit pull requests. If you're adding a new public API, please also
-consider adding <a href="https://github.com/fsprojects/QConQuantifier/tree/master/docs/content">samples</a> that can be turned into a documentation. You might
-also want to read the <a href="https://github.com/fsprojects/QConQuantifier/blob/master/README.md">library design notes</a> to understand how it works.</p>
-<p>The library is available under Public Domain license, which allows modification and
-redistribution for both commercial and non-commercial purposes. For more information see the
-<a href="https://github.com/fsprojects/QConQuantifier/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 
-<div class="tip" id="fs1">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
+<div class="tip" id="fs1">namespace System</div>
+<div class="tip" id="fs2">namespace System.IO</div>
+<div class="tip" id="fs3">namespace Deedle</div>
+<div class="tip" id="fs4">namespace FSharpAux</div>
+<div class="tip" id="fs5">namespace BioFSharp</div>
+<div class="tip" id="fs6">namespace BioFSharp.Mz</div>
+<div class="tip" id="fs7">namespace QConQuantifier</div>
+<div class="tip" id="fs8">module Parameters<br /><br />from QConQuantifier</div>
+<div class="tip" id="fs9">module Domain<br /><br />from QConQuantifier.Parameters</div>
+<div class="tip" id="fs10">module DTO<br /><br />from QConQuantifier.Parameters</div>
+<div class="tip" id="fs11">val qConQuantifierParams : QConQuantifierParams</div>
+<div class="tip" id="fs12">Multiple items<br />module Protease<br /><br />from QConQuantifier.Parameters.DTO<br /><br />--------------------<br />type Protease = | Trypsin</div>
+<div class="tip" id="fs13">Multiple items<br />module IsotopicMod<br /><br />from QConQuantifier.Parameters.DTO<br /><br />--------------------<br />type IsotopicMod =<br />&#160;&#160;| N15<br />&#160;&#160;| C13</div>
+<div class="tip" id="fs14">Multiple items<br />module MassMode<br /><br />from QConQuantifier.Parameters.DTO<br /><br />--------------------<br />type MassMode = SearchDB.MassMode</div>
+<div class="tip" id="fs15">type PSMThreshold =<br />&#160;&#160;| PepValue of float<br />&#160;&#160;| SequestScore of float</div>
+<div class="tip" id="fs16">Multiple items<br />module NTerminalSeries<br /><br />from QConQuantifier.Parameters.DTO<br /><br />--------------------<br />type NTerminalSeries =<br />&#160;&#160;| A<br />&#160;&#160;| B<br />&#160;&#160;| C<br />&#160;&#160;| AB<br />&#160;&#160;| AC<br />&#160;&#160;| BC<br />&#160;&#160;| ABC</div>
+<div class="tip" id="fs17">union case NTerminalSeries.B: NTerminalSeries</div>
+<div class="tip" id="fs18">Multiple items<br />module CTerminalSeries<br /><br />from QConQuantifier.Parameters.DTO<br /><br />--------------------<br />type CTerminalSeries =<br />&#160;&#160;| X<br />&#160;&#160;| Y<br />&#160;&#160;| Z<br />&#160;&#160;| XY<br />&#160;&#160;| XZ<br />&#160;&#160;| YZ<br />&#160;&#160;| XYZ</div>
+<div class="tip" id="fs19">union case CTerminalSeries.Y: CTerminalSeries</div>
+<div class="tip" id="fs20">type File =<br />&#160;&#160;static member AppendAllLines : path:string * contents:IEnumerable&lt;string&gt; -&gt; unit + 1 overload<br />&#160;&#160;static member AppendAllText : path:string * contents:string -&gt; unit + 1 overload<br />&#160;&#160;static member AppendText : path:string -&gt; StreamWriter<br />&#160;&#160;static member Copy : sourceFileName:string * destFileName:string -&gt; unit + 1 overload<br />&#160;&#160;static member Create : path:string -&gt; FileStream + 3 overloads<br />&#160;&#160;static member CreateText : path:string -&gt; StreamWriter<br />&#160;&#160;static member Decrypt : path:string -&gt; unit<br />&#160;&#160;static member Delete : path:string -&gt; unit<br />&#160;&#160;static member Encrypt : path:string -&gt; unit<br />&#160;&#160;static member Exists : path:string -&gt; bool<br />&#160;&#160;...</div>
+<div class="tip" id="fs21">File.WriteAllText(path: string, contents: string) : unit<br />File.WriteAllText(path: string, contents: string, encoding: Text.Encoding) : unit</div>
+<div class="tip" id="fs22">namespace Newtonsoft</div>
+<div class="tip" id="fs23">namespace Newtonsoft.Json</div>
+<div class="tip" id="fs24">type JsonConvert =<br />&#160;&#160;static val True : string<br />&#160;&#160;static val False : string<br />&#160;&#160;static val Null : string<br />&#160;&#160;static val Undefined : string<br />&#160;&#160;static val PositiveInfinity : string<br />&#160;&#160;static val NegativeInfinity : string<br />&#160;&#160;static val NaN : string<br />&#160;&#160;static member DefaultSettings : Func&lt;JsonSerializerSettings&gt; with get, set<br />&#160;&#160;static member DeserializeAnonymousType&lt;&#39;T&gt; : value:string * anonymousTypeObject:&#39;T -&gt; &#39;T + 1 overload<br />&#160;&#160;static member DeserializeObject : value:string -&gt; obj + 7 overloads<br />&#160;&#160;...</div>
+<div class="tip" id="fs25">Newtonsoft.Json.JsonConvert.SerializeObject(value: obj) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, settings: Newtonsoft.Json.JsonSerializerSettings) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, [&lt;ParamArray&gt;] converters: Newtonsoft.Json.JsonConverter []) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, formatting: Newtonsoft.Json.Formatting) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, formatting: Newtonsoft.Json.Formatting, settings: Newtonsoft.Json.JsonSerializerSettings) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, type: Type, settings: Newtonsoft.Json.JsonSerializerSettings) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, formatting: Newtonsoft.Json.Formatting, [&lt;ParamArray&gt;] converters: Newtonsoft.Json.JsonConverter []) : string<br />Newtonsoft.Json.JsonConvert.SerializeObject(value: obj, type: Type, formatting: Newtonsoft.Json.Formatting, settings: Newtonsoft.Json.JsonSerializerSettings) : string</div>
 
         </div>
         <div class="span3">

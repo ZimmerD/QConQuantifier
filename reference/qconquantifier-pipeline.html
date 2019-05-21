@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Modification - QConQuantifier</title>
+    <title>Pipeline - QConQuantifier</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="David Zimmer"/>
@@ -37,86 +37,53 @@
 
 
 
-<h1>Modification</h1>
+<h1>Pipeline</h1>
 <p>
-
-    <span>Namespace: QConQuantifier</span><br />
-        <span>Parent Module: <a href="qconquantifier-parameters-dto.html">DTO</a></span><br />
-    </p>
+  <span>Namespace: QConQuantifier</span><br />
+  </p>
 <div class="xmldoc">
 </div>
-  <h3>Union Cases</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Union Case</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
-            Acetylation&#39;ProtNTerm&#39;
+          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+            analyzeFile(...)
           </code>
-          <div class="tip" id="45">
-            <strong>Signature:</strong> <br />
+          <div class="tip" id="27">
+            <strong>Signature:</strong> peptideDB:(type) -&gt; qConQuantParams:QConQuantifierParams -&gt; outputDir:string -&gt; mzLiteFilePath:string -&gt; (type)<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/ZimmerD/QConQuantifier/tree/master/src/QConQuantifier/Parameters.fs#L91-91" class="github-link">
+                      <a href="https://github.com/ZimmerD/QConQuantifier/tree/master/src/QConQuantifier/Pipeline.fs#L14-14" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Performs identifaction and quantification of mzLite File. Results are written to outputDir</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            Carbamidomethyl&#39;Cys&#39;
+          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
+            mergeFrames(frames)
           </code>
-          <div class="tip" id="46">
-            <strong>Signature:</strong> <br />
-                                  </div>
+          <div class="tip" id="28">
+            <strong>Signature:</strong> frames:(type) list -&gt; (type)<br />
+                          <strong>Type parameters:</strong> '?8134                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/ZimmerD/QConQuantifier/tree/master/src/QConQuantifier/Parameters.fs#L92-92" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
-            Oxidation&#39;Met&#39;
-          </code>
-          <div class="tip" id="47">
-            <strong>Signature:</strong> <br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/ZimmerD/QConQuantifier/tree/master/src/QConQuantifier/Parameters.fs#L93-93" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
-            Phosphorylation&#39;Ser&#39;Thr&#39;Tyr&#39;
-          </code>
-          <div class="tip" id="48">
-            <strong>Signature:</strong> <br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/ZimmerD/QConQuantifier/tree/master/src/QConQuantifier/Parameters.fs#L94-94" class="github-link">
+                      <a href="https://github.com/ZimmerD/QConQuantifier/tree/master/src/QConQuantifier/Pipeline.fs#L98-98" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
