@@ -22,7 +22,7 @@ Setup
 2. To build the tool please make sure that you have installed:  
 	- 2.1 the latest  <a href="https://dotnet.microsoft.com/download">.NET Core SDK</a> AND <a href="https://dotnet.microsoft.com/downloadr">.NET Framework Dev Pack</a>.   
 	- 2.2 the fake cli via "dotnet tool install fake-cli -g", build by calling "fake build" in the root of the project. For details regarding projects based uppon the project scaffold please visit <a href="https://github.com/fsprojects/ProjectScaffold">ProjectScaffold</a> or <a href="https://github.com/CSBiology/CsbScaffold">CsbScaffold</a>. 
-3. Once everything is set up you can download <a href="https://1drv.ms/u/s!Ak2uNQ51QZNO00S3QjgrSl6XDMVS">sample datasets</a> and get started! 
+3. Once everything is set up you can download the<a href="https://1drv.ms/u/s!Ak2uNQ51QZNO00VztxLIcEIKTZpi">sample datasets</a> and get started! 
 
 As you can see there are 4 parameters to provide:
 
