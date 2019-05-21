@@ -66,7 +66,7 @@ module Quantification =
         }     
         
 
-    ///
+    /// Returns a function that given an isotopic variant of a qConcat peptide returns the respective labled/unlabeled version. 
     let initGetIsotopicVariant (qConCatPeps:seq<QConcatPeptide> ) =
         let labeled = 
             qConCatPeps
@@ -84,7 +84,10 @@ module Quantification =
             else 
                 unlabeled.[sequence]
 
-    ///
+    /// Given a list of psms mapping to the same ion species this function estimates an average psm.
+    /// For this various estimators of central tendency are computed e.g the mean of the precursorMz, 
+    /// the mean ScanTime as well as an precursor intensity weighted scan time mean. This psm average
+    /// reduces the risk of picking a wrong XIC peak.
     let average reader rtIndex qConQuantifierParams (psms:SearchEngineResult<float> seq) =
             let meanPrecMz            = psms |> Seq.meanBy (fun x -> x.PrecursorMZ)
             let meanScanTime          = psms |> Seq.meanBy (fun x -> x.ScanTime)           
@@ -117,7 +120,9 @@ module Quantification =
                 Stats.weightedMean weights scanTimes 
             createAveragePSM meanPrecMz meanScanTime weightedAvgScanTime meanScore retData itzData
 
-    ///                
+    /// Performs XIC extraction at a given targetMz and scan Time. Offsets are defined in qConQuantifierParams.
+    /// Subsequently, peak detection is performed and a levenberg marquardt routine (FSharp.Stats) is employed to fit a gaussian, or in case tailed
+    /// peak is observed, an exponentially modified gaussian to the selected peak.  
     let quantifyBy reader rtIndex qConQuantifierParams targetMz targetScanTime =
         let (retData,itzData)   =
             let rtQuery = IO.XIC.createRangeQuery targetScanTime qConQuantifierParams.ScanTimeWindow
@@ -133,7 +138,12 @@ module Quantification =
         quantP,retData,itzData, peakToQuantify.XData
 
              
-    ///
+    /// Quantifies every Ion identified by at least one psm. Given a collection of PSMs this function first performs an aggregation, grouping all psms mapping
+    /// to the same ion species. Afterwards the average PSM is computed. Based uppon this, XIC extraction and quantification is performed. Additionally, a paired
+    /// quantification is performed. This means that if a light variant (e.g a N14 labeled peptide) was identified, the XIC corresponding to the
+    /// heavy variant is extracted and quantified. This does not only enlarge the fraction of quantified peptides it also alows to control for the quality of 
+    /// the quantification if an ion is quantified from both perspectives (in case of both, Heavy-To-Light and Light-To-Heavy inference).
+    /// Besides the monoisotopic peak this function also quantifies the N15Minus1 peak this allows to calculate the labeling efficiency. 
     let quantifyPSMs plotDirectory reader rtIndex qConQuantifierParams getIsotopicVariant (psms:SearchEngineResult<float> list) = 
         psms
         |> List.groupBy (fun x -> x.StringSequence, x.GlobalMod,x.PrecursorCharge)
@@ -150,6 +160,7 @@ module Quantification =
                                 averagePSM.WeightedAvgScanTime
                             else 
                                 quantP.EstimatedParams.[1] 
+                        // The target PSM was not global modified -> a light peptide
                         if globMod = 0 then 
                             let labeled        = getIsotopicVariant sequence globMod
                             let n15mz          = Mass.toMZ (labeled.ModMass) (ch|> float)
@@ -158,11 +169,11 @@ module Quantification =
                             let n15Minus1Quant,_,_,_ = quantifyBy reader rtIndex qConQuantifierParams n15Minus1Mz searchScanTime
                             let chart = Charting.saveChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic   
                                             peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n15Quant.YPredicted
-                                
-                        
+      
                             createQuantifiedPeptide sequence globMod averagePSM.WeightedAvgScanTime averagePSM.MeanScore
                                     ch avgMass averagePSM.MeanPrecMz quantP.Area n15mz n15Quant.Area n15Minus1Mz n15Minus1Quant.Area
                             |> Some
+                        // The target PSM was global modified -> a heavy peptide
                         else
                             let labeled        = getIsotopicVariant sequence globMod
                             let n14mz          = Mass.toMZ (labeled.ModMass) (ch|> float)

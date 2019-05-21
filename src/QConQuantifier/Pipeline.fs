@@ -10,9 +10,12 @@ module Pipeline =
     open BioFSharp.IO
     open Deedle
 
-    ///
+    /// Performs identifaction and quantification of mzLite File. Results are written to outputDir  
     let analyzeFile (peptideDB:SQLiteConnection) (qConQuantParams:QConQuantifierParams) outputDir mzLiteFilePath = 
 
+        //////////////////
+        //IO preparation
+        ////////////////// 
         ///
         let rawFileName = Path.GetFileNameWithoutExtension mzLiteFilePath
         
@@ -62,34 +65,36 @@ module Pipeline =
             |> Seq.filter (fun ms -> IO.MassSpectrum.getMsLevel ms = 2  && IO.MassSpectrum.getPrecursorMZ ms |> isValidMz )
             |> Array.ofSeq
             
-        ///
-        let psms = 
-            Identification.calcPeptideSpectrumMatches inReader selectModPeptideByMassRange calcIonSeries qConQuantParams possibleMs2s
+        /// All peptide spectrum matches.
+        let psms = Identification.calcPeptideSpectrumMatches inReader selectModPeptideByMassRange calcIonSeries qConQuantParams possibleMs2s
             
-        /// 
-        let thresholdedPsms = Identification.thresholdPSMs qConQuantParams psms
-        
+        /// Get all peptide spectrum matches above a use defined threshold.        
+        let thresholdedPsms = Identification.thresholdPSMs qConQuantParams psms        
         //////////////////
         //Quantification
         //////////////////
+
         /// 
         let rtIndex = IO.XIC.getRetentionTimeIdx inReader 
 
-        ///
+        /// Given an isotopic variant of a qConcat peptide this function returns the respective labled/unlabeled version. 
         let getIsotopicVariant = Quantification.initGetIsotopicVariant qConCatPeps
  
         ///
         let quantifiedPSMs = Quantification.quantifyPSMs plotDirectory inReader rtIndex qConQuantParams getIsotopicVariant thresholdedPsms
 
         ///
-        let results = 
+        let results: Frame<string*bool*int,string>  = 
             quantifiedPSMs 
             |> Deedle.Frame.ofRecords  
-            |> Frame.indexRowsUsing (fun x -> x.Get("StringSequence"), x.Get("GlobalMod"),x.Get("Charge"))
+            |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
+            |> Frame.dropCol "StringSequence"
+            |> Frame.dropCol "GlobalMod"
+            |> Frame.dropCol "Charge"
             |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
         results
 
-
+    ///
     let mergeFrames (frames:Frame<_,string> list) = 
         frames |> List.reduce (Frame.join JoinKind.Outer) 
          

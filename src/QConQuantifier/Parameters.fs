@@ -9,6 +9,7 @@ module Parameters =
     module Domain =
         
         type NTerminalSeries = ((IBioItem -> float) -> AminoAcids.AminoAcid list -> PeakFamily<TaggedMass.TaggedMass> list)
+        
         type CTerminalSeries = ((IBioItem -> float) -> AminoAcids.AminoAcid list -> PeakFamily<TaggedMass.TaggedMass> list)
 
         type PSMThreshold = 
@@ -51,6 +52,7 @@ module Parameters =
                 } 
     
     module DTO = 
+
         open BioFSharp.Elements
 
         type MassMode = SearchDB.MassMode

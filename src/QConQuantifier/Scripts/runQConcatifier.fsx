@@ -9,12 +9,14 @@ open QConQuantifier
 open Parameters.Domain
 open Parameters.DTO
 
+let sourceD = __SOURCE_DIRECTORY__
+
 let qConQuantifierParams = 
     {
     Name                            = "ChlamyTruncDB"
-    DbFolder                        = ""
-    QConCatFastaPaths               = [""]
-    OrganismFastaPath               = ""
+    DbFolder                        =  @"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\db"
+    QConCatFastaPaths               = [@"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\fasta\PS QconCAT.fasta"]
+    OrganismFastaPath               =  @"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\fasta\Chlamy_JGI5_trunc.fasta"
     ParseProteinIDRegexPattern      = "id"
     Protease                        = Protease.Trypsin
     MinMissedCleavages              = 0
@@ -37,23 +39,25 @@ let qConQuantifierParams =
     NTerminalSeries                 = NTerminalSeries.B
     CTerminalSeries                 = CTerminalSeries.Y
     } 
-    |> QConQuantifierParams.toDomain
-        
 
-let inputDirectory = ""
-let outputDirectory = ""
+System.IO.File.WriteAllText(Path.Combine [|sourceD;"sampleParams.Json"|],Newtonsoft.Json.JsonConvert.SerializeObject qConQuantifierParams)
+    
+
+let qparams = qConQuantifierParams  |> QConQuantifierParams.toDomain
+let inputDirectory  = @"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples"
+let outputDirectory = @"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\out"
 let numberOfCores = 4
 
 ///
 let inputFiles = DirectoryInfo(inputDirectory).GetFiles("*.mzlite")
 ///            
-let peptideDB = PeptideLookUp.dbLookUpCn qConQuantifierParams
+let peptideDB = PeptideLookUp.dbLookUpCn qparams
 ///
 let res = 
     inputFiles 
     |> PSeq.map (fun f -> 
                     printfn "Start analyzing: %s" f.FullName
-                    let res = Pipeline.analyzeFile peptideDB qConQuantifierParams outputDirectory f.FullName
+                    let res = Pipeline.analyzeFile peptideDB qparams outputDirectory f.FullName
                     printfn "Finished analyzing: %s" f.FullName
                     res
                 )

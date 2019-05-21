@@ -7,9 +7,9 @@ module CLIArgumentParsing =
 
     open System.IO
     type CLIArguments =
-        | [<Mandatory>] [<Unique>] [<AltCommandLine("-i")>] MzLiteFileDirectory of directoryPath:string
-        | [<Mandatory>] [<Unique>] [<AltCommandLine("-o")>] OutputDirectory  of directoryPath:string 
-        | [<Mandatory>] [<Unique>] [<AltCommandLine("-p")>] ParamFile of filePath:string
+        | [<Unique>] [<AltCommandLine("-i")>] MzLiteFileDirectory of directoryPath:string
+        | [<Unique>] [<AltCommandLine("-o")>] OutputDirectory  of directoryPath:string 
+        | [<Unique>] [<AltCommandLine("-p")>] ParamFile of filePath:string
         | [<Unique>] [<AltCommandLine("-c")>] NumberOfCores of integer:int
     with
         interface IArgParserTemplate with

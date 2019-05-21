@@ -1,5 +1,6 @@
 #load "references.fsx"
 
+open System.IO
 open BioFSharp.Mz
 open SearchDB
 open QConQuantifier
@@ -8,10 +9,10 @@ open Parameters.DTO
 
 let standardQConQuantifierParams :Parameters.DTO.QConQuantifierParams = 
     {
-    Name                            = "ChlamyDB"
-    DbFolder                        = ""
-    QConCatFastaPaths               = [""]
-    OrganismFastaPath               = ""
+    Name                            = "ChlamyTruncDB"
+    DbFolder                        =  @"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\db"
+    QConCatFastaPaths               = [@"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\fasta\PS QconCAT.fasta"]
+    OrganismFastaPath               =  @"C:\Users\david\Source\Repos\netCoreRepos\QConcatifier_Samples\fasta\Chlamy_JGI5_trunc.fasta"
     ParseProteinIDRegexPattern      = "id"
     Protease                        = Protease.Trypsin
     MinMissedCleavages              = 0
@@ -35,5 +36,6 @@ let standardQConQuantifierParams :Parameters.DTO.QConQuantifierParams =
     CTerminalSeries                 = CTerminalSeries.Y
     } 
 
+let sourceD = __SOURCE_DIRECTORY__
 
-System.IO.File.WriteAllText(@"C:\Users\david\Source\Repos\netCoreRepos\QConQuantifier\src\QConQuantifierConsole\params.Json",Newtonsoft.Json.JsonConvert.SerializeObject standardQConQuantifierParams)
+System.IO.File.WriteAllText(Path.Combine [|sourceD;"sampleParams.Json"|],Newtonsoft.Json.JsonConvert.SerializeObject standardQConQuantifierParams)

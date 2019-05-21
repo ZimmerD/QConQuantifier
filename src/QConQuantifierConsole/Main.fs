@@ -28,7 +28,7 @@ module QConQuantifier =
         | Some i, Some o , Some p ->     
         
             /// Parsed process params.
-            let processParams: Parameters.Domain.QConQuantifierParams = 
+            let qConQuantarams: Parameters.Domain.QConQuantifierParams = 
                 System.IO.File.ReadAllText p
                 |> JsonConvert.DeserializeObject<Parameters.DTO.QConQuantifierParams> 
                 |> Parameters.DTO.QConQuantifierParams.toDomain           
@@ -38,14 +38,14 @@ module QConQuantifier =
                 | x when Array.isEmpty x -> failwith "provided input directory (-i) does not contain mzLiteFiles."
                 | x -> x            
             /// Creates PeptideDB and/or returns connection.           
-            let peptideDB = PeptideLookUp.dbLookUpCn processParams            
+            let peptideDB = PeptideLookUp.dbLookUpCn qConQuantarams            
             
             /// Joined result tables. 
             let res = 
                 inputFiles 
                 |> PSeq.map (fun f -> 
                                 printfn "Start analyzing: %s" f.FullName
-                                let res = Pipeline.analyzeFile peptideDB processParams o f.FullName
+                                let res = Pipeline.analyzeFile peptideDB qConQuantarams o f.FullName
                                 printfn "Finished analyzing: %s" f.FullName
                                 res
                             )
@@ -58,7 +58,9 @@ module QConQuantifier =
             res.SaveCsv(outFilePath,includeRowKeys=true,separator='\t',keyNames=["StringSequence";"GlobalMod";"Charge"])
             printfn "Done."
         
-        | _ -> failwith "Error parsing provided Parameters. Type --h for help."
+        | _ -> 
+            printfn "Please provide arguments."
+            ()
         System.Console.ReadKey() |> ignore
         printfn "Hit any key to exit."
         0
