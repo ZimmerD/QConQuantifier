@@ -123,11 +123,13 @@ type. In the end we will end up with a human readable Json file that we can exch
 <p>After creating this parameter set and writing it to a file we have everything to start the console tool.
 To see which parameters the tool expects we can start it with the --help parameter.</p>
 <p><img src="img/cmd_helpOut.PNG" alt="cmd_helpOut" /></p>
-<p>As you can see there are 4 parameters to provide:
-1. -i MzLiteFileDirectory: The path of the directory containing the files to analyze
-2. -o OutputDirectory    : The path of the directory containing the files to analyze
-3. -p ParamFile          : The path of the param file we just created
-4. -c NumberOfCores      : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.</p>
+<p>As you can see there are 4 parameters to provide:</p>
+<ol>
+<li>-i MzLiteFileDirectory: The path of the directory containing the files to analyze</li>
+<li>-o OutputDirectory    : The path of the directory containing the files to analyze</li>
+<li>-p ParamFile          : The path of the param file we just created</li>
+<li>-c NumberOfCores      : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.</li>
+</ol>
 <p>If I now add the correct paths the programm will start and finish after aprox. 15 minutes.:</p>
 <p><img src="img/cmd_Run.PNG" alt="cmd_Run" /></p>
 <p>If you now navigate to your designated output folder you will find the data in a tab seperated format as "QuantifiedPeptides.txt" and a folder containing .html
