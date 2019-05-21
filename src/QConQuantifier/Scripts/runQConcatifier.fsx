@@ -1,14 +1,17 @@
 #load "references.fsx"
 
+open System
+open System.IO
+open Deedle
+open FSharpAux
 open BioFSharp.Mz
-open SearchDB
 open QConQuantifier
 open Parameters.Domain
 open Parameters.DTO
 
-let standardQConQuantifierParams = 
+let qConQuantifierParams = 
     {
-    Name                            = "ChlamyDB"
+    Name                            = "ChlamyTruncDB"
     DbFolder                        = ""
     QConCatFastaPaths               = [""]
     OrganismFastaPath               = ""
@@ -37,5 +40,28 @@ let standardQConQuantifierParams =
     |> QConQuantifierParams.toDomain
         
 
+let inputDirectory = ""
+let outputDirectory = ""
+let numberOfCores = 4
 
-System.IO.File.WriteAllText(@"C:\Users\david\Source\Repos\netCoreRepos\QConQuantifier\src\QConQuantifierConsole\params.Json",Newtonsoft.Json.JsonConvert.SerializeObject standardQConQuantifierParams)
+///
+let inputFiles = DirectoryInfo(inputDirectory).GetFiles("*.mzlite")
+///            
+let peptideDB = PeptideLookUp.dbLookUpCn qConQuantifierParams
+///
+let res = 
+    inputFiles 
+    |> PSeq.map (fun f -> 
+                    printfn "Start analyzing: %s" f.FullName
+                    let res = Pipeline.analyzeFile peptideDB qConQuantifierParams outputDirectory f.FullName
+                    printfn "Finished analyzing: %s" f.FullName
+                    res
+                )
+    |> PSeq.withDegreeOfParallelism numberOfCores
+    |> List.ofSeq
+    |> Pipeline.mergeFrames
+
+///
+let outFilePath = Path.Combine [|outputDirectory;"QuantifiedPeptides.txt"|]
+res.SaveCsv(outFilePath,includeRowKeys=true,separator='\t',keyNames=["StringSequence";"GlobalMod";"Charge"])
+

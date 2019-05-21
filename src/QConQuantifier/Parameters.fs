@@ -149,9 +149,9 @@ module Parameters =
                 | XYZ -> Fragmentation.Series.xyzOfBioList
 
         type QConQuantifierParams = {
-                // name of database i.e. Creinhardtii_236_protein_full_labeled
+                // Name of database i.e. Creinhardtii_236_protein_full_labeled
                 Name                : string
-                // path of db storage folder
+                // Path of db storage folder
                 DbFolder            : string
                 QConCatFastaPaths   : string list 
                 OrganismFastaPath   : string

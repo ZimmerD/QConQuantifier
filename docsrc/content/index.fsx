@@ -7,22 +7,19 @@
 QConQuantifier
 ======================
 
-Documentation
+Setup
+-------
 
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      The QConQuantifier library can be downloaded from <a href="https://github.com/ZimmerD/QConQuantifier">github</a>:
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
+1. The QConQuantifier library can be downloaded from <a href="https://github.com/ZimmerD/QConQuantifier">github</a>. 
+2. To build the tool please make sure that you have installed:  
+	- 2.1 the latest  <a href="https://dotnet.microsoft.com/download">.NET Core SDK</a> AND <a href="https://dotnet.microsoft.com/downloadr">.NET Framework Dev Pack</a>.   
+	- 2.2 the fake cli via "dotnet tool install fake-cli -g", build the by calling "fake build". For details regarding projects based uppon the project scaffold please visit <a href="https://github.com/fsprojects/ProjectScaffold">ProjectScaffold</a> or <a href="https://github.com/CSBiology/CsbScaffold">CsbScaffold</a>. 
+3. Once everything is set up you can download <a href="https://1drv.ms/u/s!Ak2uNQ51QZNO00S3QjgrSl6XDMVS">sample datasets</a> and get started! 
 
 Example
 -------
 
-This example demonstrates starting the console tool.
+This example demonstrates running the console tool.
 
 *)
 #r "QConQuantifier.dll"
