@@ -93,7 +93,7 @@ module PeptideLookUp =
         )   
 
 
-    ///
+    /// Returns a function that evaluates if a given precursorMz is theoretically mapping to an ion originating from a QConcat peptide.
     let initIsValidMz qConQuantParams qConCatPeps = 
         let qConCatMzs = 
             [qConQuantParams.ExpectedMinCharge.. qConQuantParams.ExpectedMaxCharge]
