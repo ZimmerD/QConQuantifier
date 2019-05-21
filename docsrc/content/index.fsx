@@ -73,17 +73,18 @@ System.IO.File.WriteAllText("C:\Users\david\Source\Repos\netCoreRepos\QConcatifi
 After creating this parameter set and writing it to a file we have everything to start the console tool. 
 To see which parameters the tool expects we can start it with the --help parameter.
 
-![cmd_helpOut](img/cmd_helpOut.png)
+![cmd_helpOut](img/cmd_helpOut.PNG)
 
 As you can see there are 4 parameters to provide:
-- -i MzLiteFileDirectory: The path of the directory containing the files to analyze
-- -o OutputDirectory    : The path of the directory containing the files to analyze
-- -p ParamFile          : The path of the param file we just created
-- -c NumberOfCores      : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.
+
+1. -i MzLiteFileDirectory: The path of the directory containing the files to analyze
+2. -o OutputDirectory    : The path of the directory containing the files to analyze
+3. -p ParamFile          : The path of the param file we just created
+4. -c NumberOfCores      : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.
 
 If I now add the correct paths the programm will start and finish after aprox. 15 minutes.:
 
-![cmd_Run](img/cmd_Run.png)
+![cmd_Run](img/cmd_Run.PNG)
 
 If you now navigate to your designated output folder you will find the data in a tab seperated format as "QuantifiedPeptides.txt" and a folder containing .html
 graphs showing the quantification results for each peptide grouped by the respective raw file. 

@@ -23,3 +23,10 @@ Setup
 	- 2.1 the latest  <a href="https://dotnet.microsoft.com/download">.NET Core SDK</a> AND <a href="https://dotnet.microsoft.com/downloadr">.NET Framework Dev Pack</a>.   
 	- 2.2 the fake cli via "dotnet tool install fake-cli -g", build by calling "fake build" in the root of the project. For details regarding projects based uppon the project scaffold please visit <a href="https://github.com/fsprojects/ProjectScaffold">ProjectScaffold</a> or <a href="https://github.com/CSBiology/CsbScaffold">CsbScaffold</a>. 
 3. Once everything is set up you can download <a href="https://1drv.ms/u/s!Ak2uNQ51QZNO00S3QjgrSl6XDMVS">sample datasets</a> and get started! 
+
+As you can see there are 4 parameters to provide:
+
+1. MzLiteFileDirectory : The path of the directory containing the files to analyze
+2. OutputDirectory     : The path of the directory containing the files to analyze
+3. ParamFile           : The path of the param file we just created
+4. NumberOfCores       : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.
