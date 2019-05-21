@@ -122,14 +122,14 @@ type. In the end we will end up with a human readable Json file that we can exch
 </table>
 <p>After creating this parameter set and writing it to a file we have everything to start the console tool.
 To see which parameters the tool expects we can start it with the --help parameter.</p>
-<p><img src="img/cmd_helpOut.png" alt="cmd_helpOut" /></p>
+<p><img src="img/cmd_helpOut.PNG" alt="cmd_helpOut" /></p>
 <p>As you can see there are 4 parameters to provide:
-- -i MzLiteFileDirectory: The path of the directory containing the files to analyze
-- -o OutputDirectory    : The path of the directory containing the files to analyze
-- -p ParamFile          : The path of the param file we just created
-- -c NumberOfCores      : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.</p>
+1. -i MzLiteFileDirectory: The path of the directory containing the files to analyze
+2. -o OutputDirectory    : The path of the directory containing the files to analyze
+3- -p ParamFile          : The path of the param file we just created
+4. -c NumberOfCores      : The number of cores you want to use. Each File will be analyzed on a different Core and the results will be combined.</p>
 <p>If I now add the correct paths the programm will start and finish after aprox. 15 minutes.:</p>
-<p><img src="img/cmd_Run.png" alt="cmd_Run" /></p>
+<p><img src="img/cmd_Run.PNG" alt="cmd_Run" /></p>
 <p>If you now navigate to your designated output folder you will find the data in a tab seperated format as "QuantifiedPeptides.txt" and a folder containing .html
 graphs showing the quantification results for each peptide grouped by the respective raw file.</p>
 <h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
