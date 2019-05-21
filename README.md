@@ -3,7 +3,7 @@ Description
 -------
 
 The QConQuantifier provides researchers with interest in targeted proteomics using quantification qconcatamers (QConcats) 
-with an easy-to-use-all-in-one software solution provided as a console tool.
+with an easy-to-use-all-in-one software solution as a console tool.
 
  
 Motiviation
