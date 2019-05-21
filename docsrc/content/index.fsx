@@ -73,7 +73,7 @@ System.IO.File.WriteAllText("C:\Users\david\Source\Repos\netCoreRepos\QConcatifi
 After creating this parameter set and writing it to a file we have everything to start the console tool. 
 To see which parameters the tool expects we can start it with the --help parameter.
 
-![cmd_helpOut](./img/cmd_helpOut.png)
+![cmd_helpOut](img/cmd_helpOut.png)
 
 As you can see there are 4 parameters to provide:
 - -i MzLiteFileDirectory: The path of the directory containing the files to analyze
@@ -83,7 +83,7 @@ As you can see there are 4 parameters to provide:
 
 If I now add the correct paths the programm will start and finish after aprox. 15 minutes.:
 
-![cmd_Run](./img/cmd_Run.png)
+![cmd_Run](img/cmd_Run.png)
 
 If you now navigate to your designated output folder you will find the data in a tab seperated format as "QuantifiedPeptides.txt" and a folder containing .html
 graphs showing the quantification results for each peptide grouped by the respective raw file. 
