@@ -7,7 +7,7 @@
 QConWhat?
 ========================
 
-Why Quantification
+Why Quantification?
 -------
 Biological systems are frequently chosen as a target of modelling approaches. Besides measuring the concentration of products and educts of 
 biological reactions and their fluxes, it is often inevitable to gain knowledge of absolute protein abundances to gain a comprehensive understanding. 
@@ -32,4 +32,5 @@ and divide it by the number peptides and thus estimate the amount of a single pe
 this peptide cocktail can be spiked into samples originating from unlabled nitrogen source and the sample can be analyzed in a single MS run.
 Since the absolute amount of a single peptide is known, the ratio (e.g. light/heavy) can be used to calculate the absolute protein amount present in the sample.
 
+![QConcat](img/QConcat.png)
 *)
