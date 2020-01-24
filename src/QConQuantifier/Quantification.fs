@@ -9,7 +9,7 @@ open BioFSharp.IO
 open BioFSharp.Mz
 open FSharpAux.IO
 open FSharp.Stats
-open BioFSharp.Mz.Quantification.MyQuant
+open BioFSharp.Mz.Quantification.HULQ
 open PeptideLookUp
 open SearchEngineResult
 
@@ -17,12 +17,12 @@ module Quantification =
 
     ///
     type averagePSM = {
-        MeanPrecMz   : float 
-        MeanScanTime : float
-        WeightedAvgScanTime:float
-        MeanScore   : float
-        X_Xic         : float []
-        Y_Xic         : float []
+        MeanPrecMz          : float 
+        MeanScanTime        : float
+        WeightedAvgScanTime :float
+        MeanScore           : float
+        X_Xic               : float []
+        Y_Xic               : float []
         }
 
     let createAveragePSM meanPrecMz meanScanTime weightedAvgScanTime meanScore xXic yXic = {
