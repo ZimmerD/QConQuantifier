@@ -24,6 +24,7 @@
     <Compile Include="Identification.fs" />
     <Compile Include="Charting.fs" />
     <Compile Include="Quantification.fs" />
+    <Compile Include="LabelEfficiency.fs" />
     <Compile Include="Pipeline.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />

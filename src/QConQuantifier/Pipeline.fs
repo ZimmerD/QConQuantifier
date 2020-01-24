@@ -9,6 +9,7 @@ module Pipeline =
     open FSharp.Stats
     open BioFSharp.IO
     open Deedle
+    open LabelEfficiency
 
     /// Performs identifaction and quantification of mzLite File. Results are written to outputDir  
     let analyzeFile (peptideDB:SQLiteConnection) (qConQuantParams:QConQuantifierParams) outputDir mzLiteFilePath = 
@@ -85,13 +86,36 @@ module Pipeline =
 
         ///
         let results: Frame<string*bool*int,string>  = 
-            quantifiedPSMs 
-            |> Deedle.Frame.ofRecords  
-            |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
-            |> Frame.dropCol "StringSequence"
-            |> Frame.dropCol "GlobalMod"
-            |> Frame.dropCol "Charge"
-            |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
+            if qConQuantParams.EstimateLabelEfficiency then
+                quantifiedPSMs
+                |> fun qpsms ->
+                    qpsms
+                    |> Array.ofList
+                    |> Array.map predictLabelEfficiency
+                    |> estimateCorrectionFactors
+                    |> Deedle.Frame.ofRecords  
+                    |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
+                    |> Frame.dropCol "StringSequence"
+                    |> Frame.dropCol "GlobalMod"
+                    |> Frame.dropCol "Charge"
+                    |> Frame.merge 
+                        (
+                            qpsms 
+                            |> Deedle.Frame.ofRecords  
+                            |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
+                            |> Frame.dropCol "StringSequence"
+                            |> Frame.dropCol "GlobalMod"
+                            |> Frame.dropCol "Charge"
+                        )
+                    |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
+            else
+                quantifiedPSMs 
+                |> Deedle.Frame.ofRecords  
+                |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
+                |> Frame.dropCol "StringSequence"
+                |> Frame.dropCol "GlobalMod"
+                |> Frame.dropCol "Charge"
+                |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
         results
 
     ///

@@ -49,6 +49,8 @@ module Parameters =
                 ///
                 NTerminalSeries     : NTerminalSeries
                 CTerminalSeries     : CTerminalSeries
+                ///
+                EstimateLabelEfficiency : bool
                 } 
     
     module DTO = 
@@ -182,6 +184,7 @@ module Parameters =
                 ///
                 NTerminalSeries     : NTerminalSeries
                 CTerminalSeries     : CTerminalSeries
+                EstimateLabelEfficiency : bool
                 } 
 
         module QConQuantifierParams = 
@@ -215,4 +218,5 @@ module Parameters =
                 MzWindow_Da         = dtoQParams.MzWindow_Da       
                 NTerminalSeries     = NTerminalSeries.toDomain dtoQParams.NTerminalSeries
                 CTerminalSeries     = CTerminalSeries.toDomain dtoQParams.CTerminalSeries
+                EstimateLabelEfficiency = dtoQParams.EstimateLabelEfficiency
                 }                     
