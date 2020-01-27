@@ -39,10 +39,9 @@ module Charting =
         (medianLabelEfficiency:float)
         =
 
-        let title = sprintf "%s_GMod_%i_Charge_%i" sequence globalMod ch
-
         let path = 
             let sequence = sequence |> String.filter (fun x -> x <> '*')
+            let title = sprintf "%s_GMod_%i_Charge_%i" sequence globalMod ch
             Path.Combine [|plotDirectory;title|]
 
         [
@@ -74,7 +73,7 @@ module Charting =
 
         ]
         |> Chart.Combine
-        |> Chart.withTitle title
+        |> Chart.withTitle (sprintf "Sequence= %s, GlobalMod = %i, Charge State = %i" sequence globalMod ch)
         |> Chart.withX_Axis (xAxis false "m/z" 20 16)
         |> Chart.withY_Axis (yAxis false "normalized probability" 20 16 (0.,1.1))
         |> Chart.withSize(1500.,800.)
@@ -99,7 +98,7 @@ module Charting =
     
         ]
         |> Chart.Combine
-        |> Chart.withTitle(sprintf "Sequence= %s,GlobalMod = %i, Charge State = %i" sequence globalMod ch)
+        |> Chart.withTitle(sprintf "Sequence= %s, GlobalMod = %i, Charge State = %i" sequence globalMod ch)
         |> Chart.withX_Axis (xAxis false "Intensity" 20 16)
         |> Chart.withY_Axis (xAxis false "Retention Time" 20 16)
         |> Chart.withSize(1500.,800.)
