@@ -61,6 +61,6 @@ module QConQuantifier =
         | _ -> 
             printfn "Please provide arguments."
             ()
-        System.Console.ReadKey() |> ignore
         printfn "Hit any key to exit."
+        System.Console.ReadKey() |> ignore
         0

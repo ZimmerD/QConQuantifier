@@ -27,8 +27,13 @@ module Pipeline =
         let tr = inReader.BeginTransaction()
 
         ///
-        let plotDirectory =
-            let path = Path.Combine [|outputDir;"plots";rawFileName|] 
+        let psmPlotDirectory =
+            let path = Path.Combine [|outputDir;"plots";rawFileName;"PSM"|] 
+            Directory.CreateDirectory(path) |> ignore
+            path            
+
+        let lePlotDirectory =
+            let path = Path.Combine [|outputDir;"plots";rawFileName;"LabelEfficiency"|] 
             Directory.CreateDirectory(path) |> ignore
             path            
 
@@ -71,6 +76,9 @@ module Pipeline =
             
         /// Get all peptide spectrum matches above a use defined threshold.        
         let thresholdedPsms = Identification.thresholdPSMs qConQuantParams psms        
+
+        //printfn "%A" thresholdedPsms
+
         //////////////////
         //Quantification
         //////////////////
@@ -82,23 +90,46 @@ module Pipeline =
         let getIsotopicVariant = Quantification.initGetIsotopicVariant qConCatPeps
  
         ///
-        let quantifiedPSMs = Quantification.quantifyPSMs plotDirectory inReader rtIndex qConQuantParams getIsotopicVariant thresholdedPsms
-
+        let quantifiedPSMs = Quantification.quantifyPSMs psmPlotDirectory inReader rtIndex qConQuantParams getIsotopicVariant thresholdedPsms
         ///
         let results: Frame<string*bool*int,string>  = 
             if qConQuantParams.EstimateLabelEfficiency then
                 quantifiedPSMs
                 |> fun qpsms ->
-                    qpsms
-                    |> Array.ofList
-                    |> Array.map predictLabelEfficiency
-                    |> estimateCorrectionFactors
+                    let labelEfficiencyResults =
+                        qpsms
+                        |> Array.ofList
+                        |> Array.map predictLabelEfficiency
+                        |> fun predictors ->
+                            let medianLE = 
+                                predictors
+                                |> getFilteredMedianLabelEfficiency lePlotDirectory 3.
+                            predictors
+                            |> estimateCorrectionFactors medianLE
+
+                    labelEfficiencyResults
+                    |> Array.iter
+                        (fun leRes ->
+                            Charting.saveLabelEfficiencyChart 
+                                lePlotDirectory 
+                                leRes.StringSequence
+                                leRes.GlobalMod
+                                leRes.Charge
+                                (leRes.FullLabeledPattern   |> LabelEfficiency.patternOfString)
+                                (leRes.MedianPattern        |> LabelEfficiency.patternOfString)
+                                (leRes.PredictedPattern     |> LabelEfficiency.patternOfString)
+                                (leRes.ActualPattern        |> LabelEfficiency.patternOfString)
+                                leRes.PredictedLabelEfficiency
+                                leRes.MedianLabelEfficiency
+                        )
+
+                    labelEfficiencyResults
                     |> Deedle.Frame.ofRecords  
                     |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
                     |> Frame.dropCol "StringSequence"
                     |> Frame.dropCol "GlobalMod"
                     |> Frame.dropCol "Charge"
-                    |> Frame.merge 
+                    |> Frame.join JoinKind.Outer
                         (
                             qpsms 
                             |> Deedle.Frame.ofRecords  

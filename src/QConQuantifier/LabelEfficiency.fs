@@ -35,26 +35,59 @@ module LabelEfficiency =
             GlobalMod               : int
             Charge                  : int
             PredictedLabelEfficiency: float
-            PredictedPattern        : (float*float) list
-            ActualPattern           : (float*float) list
+            PredictedPattern        : string
+            ActualPattern           : string
             MedianLabelEfficiency   : float
-            MedianPattern           : (float*float) list
-            FullLabeledPattern      : (float*float) list
+            MedianPattern           : string
+            FullLabeledPattern      : string
             CorrectionFactor        : float
         }
 
-    let createLabelEfficiencyResult stringSequence globalMod charge predictedLabelEfficiency predictedPattern  actualPattern medianLabelEfficiency medianPattern fullLabeledPattern correctionFactor =
+    let stringOfPattern (p: (float*float) list) =
+        p
+        |> List.fold (fun acc (mz,prob) -> if acc = "" then (sprintf "(%f,%f)" mz prob) else sprintf "%s;(%f,%f)" acc mz prob) ""
+        |> fun x -> sprintf "[%s]" x
+
+    let patternOfString (patternString:string) =
+        if patternString = "[]" then 
+            []
+        else
+            patternString
+                .Replace("[","")
+                .Replace("]","")
+                .Split(';')
+            |> Array.map 
+                (fun mzprob ->
+                    mzprob
+                        .Replace("(","")
+                        .Replace(")","")
+                        .Split(',')
+                    |> fun x -> 
+                        (float x.[0], float x.[1])
+                )
+            |> Array.toList
+
+    let createLabelEfficiencyResult 
+        stringSequence 
+        globalMod charge 
+        predictedLabelEfficiency 
+        (predictedPattern   : (float*float) list)
+        (actualPattern      : (float*float) list)
+        medianLabelEfficiency 
+        (medianPattern      : (float*float) list)
+        (fullLabeledPattern : (float*float) list)
+        correctionFactor =
         {
-            StringSequence              = stringSequence          
-            GlobalMod                   = globalMod               
-            Charge                      = charge                  
+            StringSequence              = stringSequence
+            GlobalMod                   = globalMod     
+            Charge                      = charge        
             PredictedLabelEfficiency    = predictedLabelEfficiency
-            PredictedPattern            = predictedPattern        
-            ActualPattern               = actualPattern           
+            PredictedPattern            = predictedPattern  |> stringOfPattern
+            ActualPattern               = actualPattern     |> stringOfPattern
             MedianLabelEfficiency       = medianLabelEfficiency   
-            MedianPattern               = medianPattern           
-            FullLabeledPattern          = fullLabeledPattern      
-            CorrectionFactor            = correctionFactor        
+            MedianPattern               = medianPattern     |> stringOfPattern
+            FullLabeledPattern          = fullLabeledPattern|> stringOfPattern
+            CorrectionFactor            = correctionFactor 
         }
 
     let initlabelN15Partial n15Prob =
@@ -84,6 +117,7 @@ module LabelEfficiency =
             f
 
     let predictLabelEfficiency (qP : QuantifiedPeptide) =
+
         if (nan.Equals(qP.N15Minus1Quant)) || (nan.Equals(qP.N15Quant)) then
 
             createLabelEfficiencyPredictor
@@ -151,7 +185,7 @@ module LabelEfficiency =
                 predictedLE
                 [(qP.N15Minus1MZ,qP.N15Minus1Quant);(qP.N15MZ,qP.N15Quant)]
 
-    let estimateCorrectionFactors (predictors: LabelEfficiencyPredictor []) : LabelEfficiencyResult [] =
+    let getFilteredMedianLabelEfficiency plotDirectory tukeyC (predictors: LabelEfficiencyPredictor []) =
 
         let lEDist =
             predictors
@@ -160,11 +194,17 @@ module LabelEfficiency =
 
         let outlierBorders = FSharp.Stats.Testing.Outliers.tukey 3. lEDist
             
-        let filteredMedianPredictedLabelEfficiency =
+        let filtered = 
             lEDist
             |> Array.filter (fun eff -> eff < outlierBorders.Upper && eff > outlierBorders.Lower)
-            |> Seq.median 
 
+        Charting.saveMedianLabelEfficiencyChart lEDist filtered tukeyC outlierBorders.Upper outlierBorders.Lower plotDirectory
+
+        filtered
+        |> Seq.median 
+
+    let estimateCorrectionFactors (filteredMedianPredictedLabelEfficiency:float) (predictors: LabelEfficiencyPredictor []) : LabelEfficiencyResult [] =
+        
         predictors
         |> Array.map 
             (fun lePredictor ->
