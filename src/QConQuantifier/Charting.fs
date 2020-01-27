@@ -13,20 +13,21 @@ module Charting =
         
         let path = Path.Combine [|plotDirectory;"0_OverallMedianLabelEfficiency"|]
         [
-            Chart.BoxPlot(x=allPredictedLE,Jitter = 0.1,Boxpoints=StyleParam.Boxpoints.All,Name="All Predicted label efficiencies")
+            Chart.BoxPlot(x=allPredictedLE,Jitter = 0.1,Boxpoints=StyleParam.Boxpoints.All,Name="All Predicted <br></br>label efficiencies")
             |> Chart.withShapes 
                 [
                     (Shape.init(StyleParam.ShapeType.Line, X0 = upperBorder, X1 = upperBorder, Y0 = -0.4, Y1 = 0.4))
                     (Shape.init(StyleParam.ShapeType.Line, X0 = lowerBorder, X1 = lowerBorder, Y0 = -0.4, Y1 = 0.4))
                 ]
         
-            Chart.BoxPlot(x=correctedDist,Jitter = 0.1,Boxpoints=StyleParam.Boxpoints.All,Name="Filtered Predicted label efficiencies")
+            Chart.BoxPlot(x=correctedDist,Jitter = 0.1,Boxpoints=StyleParam.Boxpoints.All,Name="Filtered Predicted <br></br>label efficiencies")
         ]
         |> Chart.Combine
-        |> Chart.withX_Axis (yAxis false "N15 / N15 - 1 m/z Peak instensity ratio" 20 16 (0.925, 1.075))
+        |> Chart.withX_Axis (yAxis false "Label Efficiency" 20 16 (0.925, 1.075))
         |> Chart.withY_Axis (xAxis false "" 20 16)
         |> Chart.withTitle (sprintf "Label efficiency - Outlier detection (tuckeyC = %f, upper=%f, lower=%f)" tuckeyD upperBorder lowerBorder)
-        |> Chart.withSize (1000.,400.)
+        |> Chart.withMarginSize 200.
+        |> Chart.withSize (800.,400.)
         |> Chart.SaveHtmlAs(path)
 
     let saveLabelEfficiencyChart plotDirectory sequence globalMod ch 
