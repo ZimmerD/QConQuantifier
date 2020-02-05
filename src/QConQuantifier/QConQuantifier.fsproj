@@ -12,6 +12,10 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Optional: Include PDB in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PostBuildEvent>
+      cd $(TargetDir)
+      del SQLite.Interop.dll
+    </PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Scripts\references.fsx" />
@@ -24,6 +28,7 @@
     <Compile Include="Identification.fs" />
     <Compile Include="Charting.fs" />
     <Compile Include="Quantification.fs" />
+    <Compile Include="LabelEfficiency.fs" />
     <Compile Include="Pipeline.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />

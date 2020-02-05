@@ -9,7 +9,7 @@ open BioFSharp.IO
 open BioFSharp.Mz
 open FSharpAux.IO
 open FSharp.Stats
-open BioFSharp.Mz.Quantification.MyQuant
+open BioFSharp.Mz.Quantification.HULQ
 open PeptideLookUp
 open SearchEngineResult
 
@@ -17,12 +17,12 @@ module Quantification =
 
     ///
     type averagePSM = {
-        MeanPrecMz   : float 
-        MeanScanTime : float
-        WeightedAvgScanTime:float
-        MeanScore   : float
-        X_Xic         : float []
-        Y_Xic         : float []
+        MeanPrecMz          : float 
+        MeanScanTime        : float
+        WeightedAvgScanTime :float
+        MeanScore           : float
+        X_Xic               : float []
+        Y_Xic               : float []
         }
 
     let createAveragePSM meanPrecMz meanScanTime weightedAvgScanTime meanScore xXic yXic = {
@@ -167,7 +167,7 @@ module Quantification =
                             let n15Quant,rt,itz,rtP = quantifyBy reader rtIndex qConQuantifierParams n15mz searchScanTime
                             let n15Minus1Mz    = n15mz - (Mass.Table.NMassInU / (ch|> float))
                             let n15Minus1Quant,_,_,_ = quantifyBy reader rtIndex qConQuantifierParams n15Minus1Mz searchScanTime
-                            let chart = Charting.saveChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic   
+                            let chart = Charting.savePSMChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic   
                                             peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n15Quant.YPredicted
       
                             createQuantifiedPeptide sequence globMod averagePSM.WeightedAvgScanTime averagePSM.MeanScore
@@ -180,13 +180,15 @@ module Quantification =
                             let n14Quant,rt,itz,rtP      = quantifyBy reader rtIndex qConQuantifierParams n14mz searchScanTime
                             let n15Minus1Mz    = averagePSM.MeanPrecMz - (Mass.Table.NMassInU / (ch|> float))
                             let n15Minus1Quant,_,_,_ = quantifyBy reader rtIndex qConQuantifierParams n15Minus1Mz searchScanTime
-                            let chart = Charting.saveChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic  
+                            let chart = Charting.savePSMChart plotDirectory sequence globMod ch averagePSM.WeightedAvgScanTime ms2s averagePSM.X_Xic averagePSM.Y_Xic  
                                             peakToQuantify.XData peakToQuantify.YData quantP.YPredicted rt itz rtP n14Quant.YPredicted
                                 
                             createQuantifiedPeptide sequence globMod averagePSM.WeightedAvgScanTime averagePSM.MeanScore
                                     ch avgMass n14mz n14Quant.Area averagePSM.MeanPrecMz quantP.Area n15Minus1Mz n15Minus1Quant.Area
                             |> Some
                         with
-                        | _ -> Option.None
+                        | e as exn -> 
+                            //printfn "%s" e.Message
+                            Option.None
                         )
 
