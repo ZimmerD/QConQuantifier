@@ -37,6 +37,12 @@ nuget MzLite.Processing
 nuget MzLite.SQL
 nuget System.Data.SQLite
 
+git https://github.com/CSBiology/MzIO.git nuget Packages: /
+
+nuget MzIO
+nuget MzIO.Processing
+nuget MzIO.SQL
+
 nuget Deedle
 
 clitool dotnet-fake
