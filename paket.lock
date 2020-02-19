@@ -105,14 +105,6 @@ NUGET
       System.Data.SQLite.EF6
       System.Data.SQLite.Linq
       System.Xml.Linq
-  remote: paket-files/github.com/CSBiology/MzLite
-    MzLite (1.2.0)
-      Newtonsoft.Json (>= 8.0.3)
-    MzLite.Processing (1.2.0)
-      MzLite (>= 1.2)
-    MzLite.SQL (1.2.0)
-      MzLite (>= 1.2)
-      System.Data.SQLite.Core (>= 1.0.108)
 GIT
   remote: https://github.com/CSBiology/FSharpAux.git
      (456f096ee9b48ad866c483590c86421ee300c857)
@@ -125,9 +117,6 @@ GIT
       path: /
   remote: https://github.com/CSBiology/BioFSharp.Mz.git
      (986d1415c19b6acef8fa652fe4b82ff667f40694)
-      path: /
-  remote: https://github.com/CSBiology/MzLite.git
-     (564daac197c94b24530cde587af991777852a5eb)
       path: /
   remote: https://github.com/CSBiology/MzIO.git
      (653b97bf706ce733457f6ecea5605a796e3f9cf8)
