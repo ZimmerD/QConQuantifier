@@ -12,6 +12,7 @@ open FSharp.Stats
 open BioFSharp.Mz.Quantification.HULQ
 open PeptideLookUp
 open SearchEngineResult
+open MzIO.Processing
 
 module Quantification = 
 
@@ -98,10 +99,10 @@ module Quantification =
                 let w = (maxScanTime - c) + qConQuantifierParams.ScanTimeWindow
                 c, w
             let (retData,itzData)   =
-                let rtQuery = IO.XIC.createRangeQuery scanTimeCenter scanTimeWindow
-                let mzQuery = IO.XIC.createRangeQuery meanPrecMz qConQuantifierParams.MzWindow_Da
+                let rtQuery = Query.createRangeQuery scanTimeCenter scanTimeWindow
+                let mzQuery = Query.createRangeQuery meanPrecMz qConQuantifierParams.MzWindow_Da
                 let retData',itzData' =
-                    IO.XIC.getXICBy reader rtIndex rtQuery mzQuery
+                    Query.getXIC reader rtIndex rtQuery mzQuery
                     |> Array.map (fun p -> p.Rt , p.Intensity)
                     |> Array.unzip
                 retData',itzData'
@@ -125,10 +126,10 @@ module Quantification =
     /// peak is observed, an exponentially modified gaussian to the selected peak.  
     let quantifyBy reader rtIndex qConQuantifierParams targetMz targetScanTime =
         let (retData,itzData)   =
-            let rtQuery = IO.XIC.createRangeQuery targetScanTime qConQuantifierParams.ScanTimeWindow
-            let mzQuery = IO.XIC.createRangeQuery targetMz qConQuantifierParams.MzWindow_Da
+            let rtQuery = Query.createRangeQuery targetScanTime qConQuantifierParams.ScanTimeWindow
+            let mzQuery = Query.createRangeQuery targetMz qConQuantifierParams.MzWindow_Da
             let retData',itzData' =
-                IO.XIC.getXICBy reader rtIndex rtQuery mzQuery
+                Query.getXIC reader rtIndex rtQuery mzQuery
                 |> Array.map (fun p -> p.Rt , p.Intensity)
                 |> Array.unzip
             retData',itzData'

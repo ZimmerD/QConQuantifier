@@ -6,7 +6,8 @@ open System.Data.SQLite
 open Parameters.Domain
 open BioFSharp
 open BioFSharp.Mz
-open MzLite.Model
+open MzIO.Model
+open MzIO.Processing
 open IO
 open SearchEngineResult
 open Parameters.Domain

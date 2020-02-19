@@ -11,4 +11,7 @@ BioFSharp.Mz
 MzLite
 MzLite.Processing
 MzLite.SQL
+MzIO
+MzIO.Processing
+MzIO.SQL
 Deedle

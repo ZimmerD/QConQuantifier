@@ -10,6 +10,7 @@ module Pipeline =
     open BioFSharp.IO
     open Deedle
     open LabelEfficiency
+    open MzIO.Processing
 
     /// Performs identifaction and quantification of mzLite File. Results are written to outputDir  
     let analyzeFile (peptideDB:SQLiteConnection) (qConQuantParams:QConQuantifierParams) outputDir mzLiteFilePath = 
@@ -68,7 +69,7 @@ module Pipeline =
         let possibleMs2s =
             inReader
             |> IO.Reader.getMassSpectra
-            |> Seq.filter (fun ms -> IO.MassSpectrum.getMsLevel ms = 2  && IO.MassSpectrum.getPrecursorMZ ms |> isValidMz )
+            |> Seq.filter (fun ms -> MassSpectrum.getMsLevel ms = 2  && MassSpectrum.getPrecursorMZ ms |> isValidMz )
             |> Array.ofSeq
             
         /// All peptide spectrum matches.
