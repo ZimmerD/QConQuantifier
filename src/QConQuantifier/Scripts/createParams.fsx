@@ -34,6 +34,7 @@ let standardQConQuantifierParams :Parameters.DTO.QConQuantifierParams =
     MzWindow_Da                     = 0.07
     NTerminalSeries                 = NTerminalSeries.B
     CTerminalSeries                 = CTerminalSeries.Y
+    EstimateLabelEfficiency         = true
     } 
 
 let sourceD = __SOURCE_DIRECTORY__
