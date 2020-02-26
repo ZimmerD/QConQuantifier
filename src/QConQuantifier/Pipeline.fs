@@ -152,6 +152,11 @@ module Pipeline =
                 |> Ok
             else
                 Result.Error (System.Exception("File does not contain any peptides from the input QConCATemer"))
+
+        tr.Commit()
+        tr.Dispose()
+        inReader.Dispose()
+
         results
 
     ///
