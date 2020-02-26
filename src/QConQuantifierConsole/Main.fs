@@ -51,12 +51,45 @@ module QConQuantifier =
                             )
                 |> PSeq.withDegreeOfParallelism numberOfCores
                 |> List.ofSeq
-                |> Pipeline.mergeFrames
 
+            let results =
+                res
+                |> List.choose 
+                    (fun x -> 
+                        match x with
+                        | Ok f -> Some f
+                        | Result.Error _ -> None
+                    )
+
+            let errors =
+                res
+                |> List.choose 
+                    (fun x -> 
+                        match x with
+                        | Ok f -> None
+                        | Result.Error e -> Some e
+                    )
             /// Saves joined result table to provided output directory.
             let outFilePath = Path.Combine [|o;"QuantifiedPeptides.txt"|]
-            res.SaveCsv(outFilePath,includeRowKeys=true,separator='\t',keyNames=["StringSequence";"GlobalMod";"Charge"])
-            printfn "Done."
+            
+            if results.Length >= 1 then
+
+                if errors.Length >= 1 then
+                    errors|> List.iter (fun e -> printfn "%s" e.Message)
+
+                results
+                |> Pipeline.mergeFrames
+                |> fun f -> 
+                    f.SaveCsv(
+                        outFilePath,
+                        includeRowKeys=true,
+                        separator='\t',
+                        keyNames=["StringSequence";"GlobalMod";"Charge"]
+                    )
+                printfn "Done."
+            else
+                if errors.Length >= 1 then
+                    errors|> List.iter (fun e -> printfn "%s" e.Message)
         
         | _ -> 
             printfn "Please provide arguments."

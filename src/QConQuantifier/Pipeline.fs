@@ -93,8 +93,8 @@ module Pipeline =
         ///
         let quantifiedPSMs = Quantification.quantifyPSMs psmPlotDirectory inReader rtIndex qConQuantParams getIsotopicVariant thresholdedPsms
         ///
-        let results: Frame<string*bool*int,string>  = 
-            if qConQuantParams.EstimateLabelEfficiency then
+        let results: Result<Frame<string*bool*int,string>,exn> = 
+            if qConQuantParams.EstimateLabelEfficiency && quantifiedPSMs.Length > 1 then
                 quantifiedPSMs
                 |> fun qpsms ->
                     let labelEfficiencyResults =
@@ -140,7 +140,8 @@ module Pipeline =
                             |> Frame.dropCol "Charge"
                         )
                     |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
-            else
+                    |> Ok
+            elif quantifiedPSMs.Length > 0 then
                 quantifiedPSMs 
                 |> Deedle.Frame.ofRecords  
                 |> Frame.indexRowsUsing (fun x -> x.GetAs<string>("StringSequence"), x.GetAs<bool>("GlobalMod"),x.GetAs<int>("Charge"))
@@ -148,6 +149,9 @@ module Pipeline =
                 |> Frame.dropCol "GlobalMod"
                 |> Frame.dropCol "Charge"
                 |> Frame.mapColKeys (fun x -> x + "_" + rawFileName )
+                |> Ok
+            else
+                Result.Error (System.Exception("File does not contain any peptides from the input QConCATemer"))
         results
 
     ///
