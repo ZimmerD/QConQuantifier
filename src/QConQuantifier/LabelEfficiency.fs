@@ -213,7 +213,6 @@ module LabelEfficiency =
     ///This is calculated by predicting the isotopic patterns at median label (the proxy for the label efficiency of the qconcat protein) efficiency and at 100% label efficiency. The correction Factor is the 
     ///is the probability peak of 15N at median LE / probability peak of N15 at 100%Le
     let estimateCorrectionFactors (filteredMedianPredictedLabelEfficiency:float) (predictors: LabelEfficiencyPredictor []) : LabelEfficiencyResult [] =
-        
         predictors
         |> Array.map 
             (fun lePredictor ->
@@ -288,7 +287,6 @@ module LabelEfficiency =
 
                     let correctionFactor = 
                         snd n15ProbWithFullLE / snd n15ProbWithMedianLE
-
                     createLabelEfficiencyResult
                         lePredictor.StringSequence
                         lePredictor.GlobalMod

@@ -30,12 +30,11 @@ git https://github.com/CSBiology/BioFSharp.Mz.git nuget Packages: /
 
 nuget BioFSharp.Mz
 
-git https://github.com/CSBiology/MzLite.git nuget Packages: /
+git https://github.com/CSBiology/MzIO.git nuget Packages: /
 
-nuget MzLite
-nuget MzLite.Processing
-nuget MzLite.SQL
-nuget System.Data.SQLite
+nuget MzIO
+nuget MzIO.Processing
+nuget MzIO.SQL
 
 nuget Deedle
 
